@@ -9,11 +9,10 @@ interface NodeEventTeaserProps {
 }
 
 export function NodeEventTeaser({ node, ...props }: NodeEventTeaserProps) {
-  console.log(node);
   // remove <p> and </p> from the body
-  let bodeSummary = node.body[0].processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
+  let bodeSummary = node.body[0]?.processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
   // make it only 60 characters long
-  bodeSummary = bodeSummary.substring(0, 150);
+  bodeSummary = bodeSummary?.substring(0, 150);
   
   return (
    <Link href={`${node.path.alias}`}>

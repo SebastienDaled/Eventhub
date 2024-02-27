@@ -57,6 +57,12 @@ export async function getStaticProps(
       include: "field_image,uid",
     }
   }
+  if (type === "node--event") {
+    params = {
+      include: "uid,field_genre,field_country",
+    }
+
+  }
 
   const resource = await drupal.getResourceFromContext<DrupalNode>(
     path,

@@ -6,7 +6,7 @@ import { Footer } from "./footer";
 import { useRouter } from "next/router";
 
 export function Layout({ children, node }) {
-  let bodeSummary = node.body?.processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
+  let bodeSummary = node.body[0].processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
   
   return (
     <>

@@ -9,47 +9,31 @@ interface NodeArticleTeaserProps {
 }
 
 export function NodeArticleTeaser({ node, ...props }: NodeArticleTeaserProps) {
+  const bodeSummary = node.body[0]?.processed.replace(/<p>/g, '').replace(/<\/p>/g, '').substring(0, 150);
+  
+
   return (
-    <article {...props}>
-      <Link href={node.path.alias} className="no-underline hover:text-blue-600">
-        <h2 className="mb-4 text-4xl font-bold">{node.title}</h2>
-      </Link>
-      <div className="mb-4 text-gray-600">
-        {node.uid?.display_name ? (
-          <span>
-            Posted by{" "}
-            <span className="font-semibold">{node.uid?.display_name}</span>
-          </span>
-        ) : null}
-        <span> - {formatDate(node.created)}</span>
-      </div>
-      {node.field_image && (
-        <figure className="my-4">
-          <Image
-            src={absoluteUrl(node.field_image.uri.url)}
-            width={768}
-            height={480}
-            alt={node.field_image.resourceIdObjMeta.alt}
-          />
-        </figure>
-      )}
-      <Link
-        href={node.path.alias}
-        className="inline-flex items-center px-6 py-2 border border-gray-600 rounded-full hover:bg-gray-100"
-      >
-        Read article
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-4 h-4 ml-2"
-        >
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
-      </Link>
-    </article>
+    <Link href={`${node.path.alias}`}>
+      <article {...props} className="eventcard">
+        <div className="eventcard__mask"></div>
+        {node.field_image && (
+          <figure className="my-4">
+            <Image
+                src={absoluteUrl(node.field_image[0].uri.url)}
+                width={768}
+                height={480}
+                alt={node.field_image.resourceIdObjMeta?.alt}
+              />
+          </figure>
+        )}
+        <div className="eventcard__info">
+          <h2>{node.title}</h2>
+          <p>{bodeSummary}</p>
+          <div className="eventcard__info__extra">
+            <span>{formatDate(node.created)}</span>
+          </div>
+        </div>
+      </article>
+    </Link>
   )
 }

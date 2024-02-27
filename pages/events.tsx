@@ -23,7 +23,7 @@ export default function EventsPage({ nodes, header }: IndexPageProps) {
         />
       </Head>
 
-      <div className="core">
+      <div className="corePage">
         <h1>Find Events</h1>
       </div>
     </Layout>

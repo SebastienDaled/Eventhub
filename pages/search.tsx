@@ -23,7 +23,7 @@ export default function SearchPage({ nodes, header }: IndexPageProps) {
         />
       </Head>
 
-      <div className="core">
+      <div className="corePage">
         <h1>Search</h1>
       </div>
     </Layout>

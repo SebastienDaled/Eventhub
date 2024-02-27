@@ -23,7 +23,7 @@ export default function ArticlesPage({ nodes, header }: IndexPageProps) {
         />
       </Head>
 
-      <div className="core">
+      <div className="corePage">
         <h1>Articles</h1>
       </div>
     </Layout>
