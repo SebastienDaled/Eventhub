@@ -143,7 +143,7 @@ export async function getStaticProps(
         'page[limit]': 9,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date",
         include: "node_type,uid",
-        sort: "-created",
+        sort: "-field_date",
       },
     }
   )

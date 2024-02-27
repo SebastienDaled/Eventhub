@@ -1,18 +1,74 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
+import { DrupalMenuLinkContent, DrupalNode, DrupalSearchApiFacet, getSearchIndexFromContext } from "next-drupal"
 
 import { drupal } from "lib/drupal"
 import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 import { NodeEventTeaser } from "components/node--event--teaser"
+import { use, useEffect, useState } from "react"
+import { deserialize } from "v8"
 
 interface IndexPageProps {
-  nodes: any[];
+  nodes: DrupalNode[];
   header: any;
+  taxonomyTermsCountry: any[];
+  taxonomyTermsGenre: any[];
 }
 
-export default function EventsPage({ nodes, header }: IndexPageProps) {
+export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxonomyTermsGenre }: IndexPageProps) {
+  
+  const [startPage, setStartPage] = useState(0);
+  const [nodesArray, setNodesArray] = useState([]);
+
+  const [countrys, setCountrys] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [date, setDate] = useState('');
+
+  const [extraGenreFilters, setExtraGenreFilters] = useState(false);
+
+  const maxNodes = 9;
+
+  const maxPages = (maxNodes) => {
+    setNodesArray(nodes.slice(startPage, startPage + maxNodes));
+  }
+
+  useEffect(() => {
+    if (countrys.length > 0) {
+      const filteredNodes = nodes.filter((node) => {
+        return countrys.includes(node.field_country.name);
+      });
+      setNodesArray(filteredNodes);
+    } else {
+      maxPages(maxNodes)
+    }
+  }, [countrys, nodes]);
+
+  useEffect(() => {
+    if (genres.length > 0) {
+      const filteredNodes = nodes.filter((node) => {
+        return genres.includes(node.field_genre.name);
+      });
+      setNodesArray(filteredNodes);
+    } else {
+      maxPages(maxNodes)
+    }
+
+  }, [genres, nodes]);
+
+  useEffect(() => {
+    if (date) {
+      const filteredNodes = nodes.filter((node) => {
+        return node.field_date === date;
+      });
+      setNodesArray(filteredNodes);
+    }
+  }, [date, nodes]);
+
+  useEffect(() => {
+    setNodesArray(nodes.slice(startPage, startPage + maxNodes));
+}, [nodes, startPage]);
+
   return (
     <Layout node={header}>
       <Head>
@@ -25,6 +81,148 @@ export default function EventsPage({ nodes, header }: IndexPageProps) {
 
       <div className="corePage">
         <h1>Find Events</h1>
+
+        <div className="eventsSearch__container" id="">
+          <div className="eventsSearch__container__filter"> 
+            <h2>Filters</h2>
+            {/* i want filters for Country, Genre, Date and price range from min to max */}
+            <div className="eventsSearch__container__filter__country">
+              <label htmlFor="country">Country</label>
+              {/* checkboxes for countrys */}
+              {taxonomyTermsCountry?.length ? (
+                taxonomyTermsCountry.slice(0, 5).map((country) => (
+                  <div key={country.id}>
+                    <input
+                      type="checkbox"
+                      id={country.id}
+                      name={country.id}
+                      value={country.id}
+                      onClick={() => {
+                        const updatedCountrys = [...countrys];
+                        const index = updatedCountrys.indexOf(country.name);
+
+                        if (index !== -1) {
+                          // Country is already in the array, so remove it
+                          updatedCountrys.splice(index, 1);
+                        } else {
+                          // Country is not in the array, so add it
+                          updatedCountrys.push(country.name);
+                        }
+
+                        setCountrys(updatedCountrys);
+                      }}
+                      checked={countrys.includes(country.name)} // Added checked attribute
+                      onChange={() => console.log('changed')}
+                    />
+                    <label htmlFor={country.id}>{country.name}</label>
+                    </div>
+                ))
+              ) : (
+                <p className="py-4">No Articles</p>
+              )}
+
+
+            </div>
+            <div className="eventsSearch__container__filter__genre">
+              <label htmlFor="genre">Genre</label>
+              {taxonomyTermsGenre?.length ? (
+                taxonomyTermsGenre.slice(0, 5).map((genre) => (
+                  <div key={genre.id}>
+                    <input
+                      type="checkbox"
+                      id={genre.id}
+                      name={genre.id}
+                      value={genre.id}
+                      onClick={() => {
+                        const updatedGenres = [...genres];
+                        const index = updatedGenres.indexOf(genre.name);
+
+                        if (index !== -1) {
+                          // Genre is already in the array, so remove it
+                          updatedGenres.splice(index, 1);
+                        } else {
+                          // Genre is not in the array, so add it
+                          updatedGenres.push(genre.name);
+                        }
+
+                        setGenres(updatedGenres);
+                      }}
+                      checked={genres.includes(genre.name)} // Added checked attribute
+                      onChange={() => console.log('changed')}
+                    />
+                    <label htmlFor={genre.id}>{genre.name}</label>
+                    
+                    </div>
+                ))
+              ) : (
+                <p className="py-4">No Articles</p>
+              )}
+
+              {!extraGenreFilters ? (<button className="more" onClick={() => setExtraGenreFilters(!extraGenreFilters)}>More</button>) : null}
+
+              {extraGenreFilters ? (
+                <div>
+                  {taxonomyTermsGenre?.length ? (
+                    taxonomyTermsGenre.slice(5).map((genre) => (
+                      <div key={genre.id}>
+                        <input
+                          type="checkbox"
+                          id={genre.id}
+                          name={genre.id}
+                          value={genre.id}
+                          onClick={() => {
+                            const updatedGenres = [...genres];
+                            const index = updatedGenres.indexOf(genre.name);
+
+                            if (index !== -1) {
+                              // Genre is already in the array, so remove it
+                              updatedGenres.splice(index, 1);
+                            } else {
+                              // Genre is not in the array, so add it
+                              updatedGenres.push(genre.name);
+                            }
+
+                            setGenres(updatedGenres);
+                          }}
+                          checked={genres.includes(genre.name)} // Added checked attribute
+                        />
+                        <label htmlFor={genre.id}>{genre.name}</label>
+                        
+                        </div>
+                    ))
+                  ) : (
+                    <p className="py-4">No Articles</p>
+                  )}
+                </div>
+              ) : null}
+
+              {extraGenreFilters ? (<button className="more" onClick={() => setExtraGenreFilters(!extraGenreFilters)}>Less</button>) : null}
+            </div>
+            <div className="eventsSearch__container__filter__date">
+              <label htmlFor="date">Date</label>
+              <input type="date" id="date" name="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+
+
+          </div>
+          {nodesArray?.length ? (
+              <div className="eventsSearch__container__events" id="slider">
+                {nodesArray.map((node) => (
+                  <div key={node.id}>
+                    <NodeEventTeaser node={node} />
+                  </div>
+                ))}
+              </div>
+          ) : (
+            <p className="py-4">No Articles</p>
+            )}
+
+          <div className="pager">
+            <button onClick={() => setStartPage(startPage - 9)}>previous</button>
+            <button onClick={() => setStartPage(startPage + 9)}>next</button>
+          </div>
+          
+        </div>
       </div>
     </Layout>
   );
@@ -38,11 +236,12 @@ export async function getStaticProps(
     "node--event",
     context,
     { 
+      // order it on field_date
       params: {
         "filter[status]": 1,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body",
-        include: "node_type,uid",
-        sort: "-created",
+        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
+        include: "node_type,uid,field_genre,field_country",
+        sort: "-field_date",
       },
     }
   )
@@ -53,12 +252,36 @@ export async function getStaticProps(
   )
   console.log(header, 'header');
 
-  
+  const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
+    "taxonomy_term--country",
+    context,
+    { 
+      params: {
+        "filter[status]": 1,
+        "fields[taxonomy_term--country]": "name",
+        include: "vid",
+      },
+    }
+  )
+
+  const taxonomyTermsGenre = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
+    "taxonomy_term--genre",
+    context,
+    { 
+      params: {
+        "filter[status]": 1,
+        "fields[taxonomy_term--genre]": "name",
+        include: "vid",
+      },
+    }
+  )
 
   return {
     props: {
       nodes,
       header,
+      taxonomyTermsCountry,
+      taxonomyTermsGenre,
     },
   }
 }
