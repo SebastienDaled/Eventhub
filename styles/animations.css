@@ -1,0 +1,16 @@
+.mainnav a{
+  transition: all 0.3s ease;
+}
+.extranav a{
+  transition: all 0.3s ease;
+}
+.mainnav a:hover {
+  color: var(--color-primary-400);
+  text-decoration: none;
+  transform: scale(1.1);
+}
+.extranav a:hover {
+  color: var(--color-primary-400);
+  text-decoration: none;
+  transform: scale(1.1);
+}

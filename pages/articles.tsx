@@ -25,6 +25,21 @@ export default function ArticlesPage({ nodes, header }: IndexPageProps) {
 
       <div className="corePage">
         <h1>Articles</h1>
+
+        {nodes?.length ? (
+          <div className="" id="">
+            <div className="upcomingevents" id="slider">
+              {nodes.map((node) => (
+                <div key={node.id}>
+                  <NodeArticleTeaser node={node} />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="py-4">No nodes found</p>
+        )}
+
       </div>
     </Layout>
   );
@@ -35,13 +50,13 @@ export async function getStaticProps(
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
   // node--event
   const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--event",
+    "node--article",
     context,
     { 
       params: {
         "filter[status]": 1,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body",
-        include: "node_type,uid",
+        "fields[node--article]": "title,path,field_image,uid,created,body",
+        include: "node_type,uid,field_image",
         sort: "-created",
       },
     }

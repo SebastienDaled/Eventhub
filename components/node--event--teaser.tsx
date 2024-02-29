@@ -20,13 +20,12 @@ export function NodeEventTeaser({ node, ...props }: NodeEventTeaserProps) {
       <div className="eventcard__mask"></div>
       {node.field_hero_image_source && (
         <figure className="my-4">
-          {/* <Image
+          <Image
             src={node.field_hero_image_source}
             width={768}
             height={480}
             alt={node.field_hero_image_source}
-          /> */}
-          <img src={node.field_hero_image_source} alt="" />
+          />
         </figure>
       )}
       <div className="eventcard__info">

@@ -4,10 +4,14 @@ import { PreviewAlert } from "components/preview-alert"
 import { drupal } from "lib/drupal";
 import { Footer } from "./footer";
 import { useRouter } from "next/router";
+import { Header } from "./header";
 
 export function Layout({ children, node }) {
   let bodeSummary = node.body[0].processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
   
+  // get utl path
+  const path = useRouter().pathname;
+
   return (
     <>
       <PreviewAlert />
@@ -17,10 +21,14 @@ export function Layout({ children, node }) {
             {/* top nav and main nav */}
             
             <div className="extranav">
-              <Link href="/about-us">
+              <Link href="/about-us" className={
+                  path === '/about-us' ? 'activeSmall' : ''
+                }>
                 About Us
               </Link>
-              <Link href="/contact">
+              <Link href="/contact" className={
+                  path === '/contact' ? 'activeSmall' : ''
+                }>
                 Contact
               </Link>
             </div>
@@ -32,13 +40,19 @@ export function Layout({ children, node }) {
                 </Link>
               </div>
               <div className="mainnav__links">
-                <Link href="/events">
+                <Link href="/events" className={
+                  path === '/events' ? 'active' : ''
+                }>
                   Events
                 </Link>
-                <Link href="/articles">
+                <Link href="/articles" className={
+                  path === '/articles' ? 'active' : ''
+                }>
                   Articles
                 </Link>
-                <Link href="/search">
+                <Link href="/search" className={
+                  path === '/search' ? 'active' : ''
+                }>
                   Search
                 </Link>
               </div>
@@ -48,11 +62,16 @@ export function Layout({ children, node }) {
         {/* if page is on / */}
         {useRouter().pathname === '/' && (
           <header>
+            <div className="assets">
+              <div className="circleSmall circleSmall--left"></div>
+              <div className="circleBig"></div>
+              <div className="circleSmall circleSmall--right"></div>
+            </div>
             <div className="headerInfo">
               <h1>{node.title}</h1>
               <p>{bodeSummary}</p>
             </div>
-          </header>
+        </header>
         )}
         {/* <main className="container py-10 mx-auto">{children}</main> */}
         <main>{children}</main>

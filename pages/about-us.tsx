@@ -31,7 +31,7 @@ export default function AboutUsPage({ nodes, header, allImages }: IndexPageProps
         />
       </Head>
 
-      <div className="core">
+      <div className="coreAbout">
         <h1>{nodes.title}</h1>
 
         <div className="content">

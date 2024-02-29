@@ -27,7 +27,7 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
 
   const [extraGenreFilters, setExtraGenreFilters] = useState(false);
 
-  const maxNodes = 9;
+  const maxNodes = 15;
 
   const maxPages = (maxNodes) => {
     setNodesArray(nodes.slice(startPage, startPage + maxNodes));
@@ -58,8 +58,11 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
 
   useEffect(() => {
     if (date) {
+      console.log(date, 'date');
+      
       const filteredNodes = nodes.filter((node) => {
-        return node.field_date === date;
+        const dateNode = new Date(node.field_date).toISOString().split('T')[0];
+        return dateNode === date;
       });
       setNodesArray(filteredNodes);
     }
@@ -218,8 +221,8 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
             )}
 
           <div className="pager">
-            <button onClick={() => setStartPage(startPage - 9)}>previous</button>
-            <button onClick={() => setStartPage(startPage + 9)}>next</button>
+            <button onClick={() => setStartPage(startPage - maxNodes)}>previous</button>
+            <button onClick={() => setStartPage(startPage + maxNodes)}>next</button>
           </div>
           
         </div>
@@ -241,7 +244,7 @@ export async function getStaticProps(
         "filter[status]": 1,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
         include: "node_type,uid,field_genre,field_country",
-        sort: "-field_date",
+        sort: "field_date",
       },
     }
   )

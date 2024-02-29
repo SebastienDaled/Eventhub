@@ -143,7 +143,9 @@ export async function getStaticProps(
         'page[limit]': 9,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date",
         include: "node_type,uid",
-        sort: "-field_date",
+        // ascending
+        sort: "field_date",
+
       },
     }
   )
@@ -166,6 +168,11 @@ export async function getStaticProps(
   const header = await drupal.getResource(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
+    {
+      params: {
+        "fields[node--page]": "title,body",
+      },
+    }
   )
   // console.log(header, 'header');
 

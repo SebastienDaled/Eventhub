@@ -2,14 +2,21 @@ import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 
 import { absoluteUrl, formatDate } from "lib/utils"
+import { NodeEventTeaser } from "./node--event--teaser"
 
 interface NodeArticleProps {
   node: DrupalNode
+  related?: DrupalNode[]
 }
 
-export function NodeEvent({ node, ...props }: NodeArticleProps) {
-  console.log(node, 'node');
-  
+export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
+  let relatedNodes = related.filter((relatedNode) => {
+    return relatedNode.field_genre.name === node.field_genre.name && relatedNode.id !== node.id;
+  }
+  )
+  relatedNodes = relatedNodes.slice(0, 3);
+
+
   return (
 
    <>
@@ -77,9 +84,17 @@ export function NodeEvent({ node, ...props }: NodeArticleProps) {
                   <p>Min: {node.field_min_price} - Max: {node.field_max_price} </p>
 
                 </div>
+
+                <div>
+                  <h3>Buy Tickets</h3>
+                  <button className="btn__buy">Buy Tickets</button>
+
+                  <input type="number" className="input__buy" defaultValue={1} min={1} max={5}/>
+
+                </div>
             </div>
             <div>
-              {node.field_image && (
+              {node.field_seatmap_image_source && (
                 <Image
                 src={node.field_seatmap_image_source}
                 alt={node.field_seatmap_image_source.alt}
@@ -92,7 +107,19 @@ export function NodeEvent({ node, ...props }: NodeArticleProps) {
               )}
             </div>
           </div>
-
+          
+          {relatedNodes.length > 0 && (
+            <div className="eventPage__related">
+              <h2 className="subtitle">Related Events</h2>
+              <div className="upcomingevents" id="slider">
+                {relatedNodes.map((node) => (
+                  <div key={node.id}>
+                    <NodeEventTeaser node={node} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </article>
       </div>
     </>

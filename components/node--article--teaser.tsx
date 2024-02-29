@@ -11,7 +11,7 @@ interface NodeArticleTeaserProps {
 export function NodeArticleTeaser({ node, ...props }: NodeArticleTeaserProps) {
   const bodeSummary = node.body[0]?.processed.replace(/<p>/g, '').replace(/<\/p>/g, '').substring(0, 150);
   
-
+  
   return (
     <Link href={`${node.path.alias}`}>
       <article {...props} className="eventcard">

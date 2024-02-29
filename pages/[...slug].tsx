@@ -13,9 +13,10 @@ const RESOURCE_TYPES = ["node--page", "node--article"]
 interface NodePageProps {
   resource: DrupalNode
   header: any
+  related: any
 }
 
-export default function NodePage({ resource, header }: NodePageProps) {
+export default function NodePage({ resource, header, related }: NodePageProps) {
   if (!resource) return null
 
   return (
@@ -26,7 +27,7 @@ export default function NodePage({ resource, header }: NodePageProps) {
       </Head>
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} />}
-      {resource.type === "node--event" && <NodeEvent node={resource} />} 
+      {resource.type === "node--event" && <NodeEvent node={resource} related={related} />} 
     </Layout>
   )
 }
@@ -93,10 +94,26 @@ export async function getStaticProps(
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
+  const related = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
+    "node--event",
+    context,
+    { 
+      // order it on field_date
+      params: {
+        "filter[status]": 1,
+        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
+        include: "node_type,uid,field_genre,field_country",
+        sort: "-field_date",
+      },
+    }
+  )
+
+
   return {
     props: {
       resource,
       header,
+      related,
     },
   }
 }
