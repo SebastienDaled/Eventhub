@@ -55,6 +55,11 @@ export function Layout({ children, node }) {
                 }>
                   Search
                 </Link>
+                <Link href="/calender" className={
+                  path === '/calender' ? 'active' : ''
+                }>
+                  Calender
+                </Link>
               </div>
             </div>
           </div>

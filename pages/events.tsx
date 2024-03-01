@@ -20,13 +20,14 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
   
   const [startPage, setStartPage] = useState(0);
   const [nodesArray, setNodesArray] = useState([]);
+  const [resetFilters, setResetFilters] = useState(false);
 
   const [countrys, setCountrys] = useState([]);
   const [genres, setGenres] = useState([]);
   const [date, setDate] = useState('');
 
   const [extraGenreFilters, setExtraGenreFilters] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const maxNodes = 15;
 
   const maxPages = (maxNodes) => {
@@ -39,8 +40,10 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
         return countrys.includes(node.field_country.name);
       });
       setNodesArray(filteredNodes);
+      setResetFilters(true);
     } else {
       maxPages(maxNodes)
+      setResetFilters(false);
     }
   }, [countrys, nodes]);
 
@@ -50,8 +53,10 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
         return genres.includes(node.field_genre.name);
       });
       setNodesArray(filteredNodes);
+      setResetFilters(true);
     } else {
       maxPages(maxNodes)
+      setResetFilters(false);
     }
 
   }, [genres, nodes]);
@@ -65,12 +70,17 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
         return dateNode === date;
       });
       setNodesArray(filteredNodes);
+      setResetFilters(true);
+    } else {
+      maxPages(maxNodes)
+      setResetFilters(false);
     }
+    
   }, [date, nodes]);
 
   useEffect(() => {
     setNodesArray(nodes.slice(startPage, startPage + maxNodes));
-}, [nodes, startPage]);
+  }, [nodes, startPage]);
 
   return (
     <Layout node={header}>
@@ -206,23 +216,43 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
               <input type="date" id="date" name="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </div>
 
-
-          </div>
-          {nodesArray?.length ? (
-              <div className="eventsSearch__container__events" id="slider">
-                {nodesArray.map((node) => (
-                  <div key={node.id}>
-                    <NodeEventTeaser node={node} />
-                  </div>
-                ))}
-              </div>
-          ) : (
-            <p className="py-4">No Articles</p>
+            {resetFilters && (
+              <button onClick={() => {
+                setCountrys([]);
+                setGenres([]);
+                setDate('');
+                setResetFilters(false);
+              }} className="reset_filter">Reset Filters</button>
             )}
+          </div>
+          <div>
+            {nodesArray?.length ? (
+                <div className="eventsSearch__container__events" id="slider">
+                  {nodesArray.map((node) => (
+                    <div key={node.id}>
+                      <NodeEventTeaser node={node} />
+                    </div>
+                  ))}
+                </div>
+            ) : (
+              <p className="py-4">No Articles</p>
+              )}
 
-          <div className="pager">
-            <button onClick={() => setStartPage(startPage - maxNodes)}>previous</button>
-            <button onClick={() => setStartPage(startPage + maxNodes)}>next</button>
+            <div className="pager">
+              <button onClick={() => {
+                if (currentPage > 1) {
+                  setStartPage(startPage - maxNodes);
+                  setCurrentPage(currentPage - 1);
+                }
+              }}>previous</button>
+
+              <p>{currentPage}</p>
+
+              <button onClick={() => {
+                setStartPage(startPage + maxNodes);
+                setCurrentPage(currentPage + 1);
+              }}>next</button>
+            </div>
           </div>
           
         </div>
@@ -242,6 +272,7 @@ export async function getStaticProps(
       // order it on field_date
       params: {
         "filter[status]": 1,
+        "filter[field_past_date]": 0,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
         include: "node_type,uid,field_genre,field_country",
         sort: "field_date",

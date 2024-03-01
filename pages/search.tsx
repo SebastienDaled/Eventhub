@@ -101,9 +101,10 @@ export async function getStaticProps(
     { 
       params: {
         "filter[status]": 1,
+        "filter[field_past_date]": 0,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_date,field_country",
         include: "node_type,uid",
-        sort: "-created",
+        sort: "field_date",
       },
     }
   )
