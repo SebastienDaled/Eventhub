@@ -16,8 +16,7 @@ interface IndexPageProps {
 
 export default function CalenderPage({ header, dates }: IndexPageProps) {
   const dataDates = JSON.stringify(dates);
-  console.log(dataDates, 'dataDates');
-  
+
   return (
     <Layout node={header}>
       <Head>
@@ -54,8 +53,6 @@ export async function getStaticProps(
       },
     }
   )
-  console.log(`nodes`, nodes);
-  
   // get only the dates on field_date
   const dates = nodes.map((node) => {
     // only return the date and title
@@ -65,14 +62,10 @@ export async function getStaticProps(
     }
   })
   
-
   const header = await drupal.getResource(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
-  console.log(header, 'header');
-
-  
 
   return {
     props: {

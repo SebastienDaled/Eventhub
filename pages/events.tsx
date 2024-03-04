@@ -235,10 +235,11 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
                   ))}
                 </div>
             ) : (
-              <p className="py-4">No Articles</p>
+              <p className="py-4">No Events</p>
               )}
 
-            <div className="pager">
+            {nodesArray?.length ? (
+              <div className="pager">
               <button onClick={() => {
                 if (currentPage > 1) {
                   setStartPage(startPage - maxNodes);
@@ -253,6 +254,7 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
                 setCurrentPage(currentPage + 1);
               }}>next</button>
             </div>
+            ) : null}
           </div>
           
         </div>
@@ -273,7 +275,7 @@ export async function getStaticProps(
       params: {
         "filter[status]": 1,
         "filter[field_past_date]": 0,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
+        "fields[node--event]": "title,path,uid,field_hero_image_source,field_genre,field_country,field_date,field_city",
         include: "node_type,uid,field_genre,field_country",
         sort: "field_date",
       },
@@ -284,7 +286,6 @@ export async function getStaticProps(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
-  console.log(header, 'header');
 
   const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
     "taxonomy_term--country",
@@ -294,6 +295,7 @@ export async function getStaticProps(
         "filter[status]": 1,
         "fields[taxonomy_term--country]": "name",
         include: "vid",
+        sort: "name",
       },
     }
   )
@@ -306,6 +308,7 @@ export async function getStaticProps(
         "filter[status]": 1,
         "fields[taxonomy_term--genre]": "name",
         include: "vid",
+        sort: "name",
       },
     }
   )

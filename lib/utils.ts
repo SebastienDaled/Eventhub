@@ -10,3 +10,7 @@ export function formatDate(input: string): string {
 export function absoluteUrl(input: string) {
   return `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}${input}`
 }
+
+if (typeof window !== "undefined" && localStorage.getItem('shoppingCart') === null) {
+  localStorage.setItem('shoppingCart', "[]")
+}

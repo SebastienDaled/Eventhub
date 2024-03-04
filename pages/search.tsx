@@ -102,7 +102,7 @@ export async function getStaticProps(
       params: {
         "filter[status]": 1,
         "filter[field_past_date]": 0,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_date,field_country",
+        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_date,field_country,field_city",
         include: "node_type,uid",
         sort: "field_date",
       },
@@ -115,8 +115,8 @@ export async function getStaticProps(
     { 
       params: {
         "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created,body",
-        include: "node_type,uid,field_image",
+        "fields[node--article]": "title,path,field_image,uid,created,body,field_alinea",
+        include: "node_type,uid,field_image,field_alinea",
         sort: "-created",
       },
     }

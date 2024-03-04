@@ -9,7 +9,7 @@ const nextConfig = {
       's1.ticketm.net',
       'media.ticketmaster.eu',
       'maps.ticketmaster.com',
-      
+      'via.placeholder.com'
     ],
   },
   sassOptions: {

@@ -158,8 +158,8 @@ export async function getStaticProps(
       params: {
         "filter[status]": 1,
         'page[limit]': 6,
-        "fields[node--article]": "title,path,field_image,uid,created,body",
-        include: "node_type,uid,field_image",
+        "fields[node--article]": "title,path,field_image,uid,created,body,field_alinea",
+        include: "node_type,uid,field_image,field_alinea",
         sort: "-created",
       },
     }

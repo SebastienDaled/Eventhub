@@ -3,6 +3,7 @@ import { DrupalNode } from "next-drupal"
 
 import { absoluteUrl, formatDate } from "lib/utils"
 import { NodeEventTeaser } from "./node--event--teaser"
+import { BtnTickets } from "./btn--buy-tickets"
 
 interface NodeArticleProps {
   node: DrupalNode
@@ -85,13 +86,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
 
                 </div>
 
-                <div>
-                  <h3>Buy Tickets</h3>
-                  <button className="btn__buy">Buy Tickets</button>
-
-                  <input type="number" className="input__buy" defaultValue={1} min={1} max={5}/>
-
-                </div>
+                <BtnTickets node_id={node.id} />
             </div>
             <div>
               {node.field_seatmap_image_source && (

@@ -60,7 +60,7 @@ export function Footer() {
       <div className="bottomFooter">
         <div className="bottomFooter_block">
           <div>
-            <h1>EventHub <span>©2024 Sebastien Daled-Rosseel</span></h1>
+            <h1>EventHub <span className="extraInfoText">©2024 Sebastien Daled-Rosseel</span></h1>
           </div>
           <div className="bottomFooter_links">
             {/* Cookieverklarin, Gebruiksvoorwaarden, Privacyverklaring, Cookie */}
