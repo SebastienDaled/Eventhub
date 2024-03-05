@@ -13,16 +13,12 @@ interface IndexPageProps {
   nodes: any;
   header: any;
   allImages: any;
+  menu: any;
 }
 
-export default function AboutUsPage({ nodes, header, allImages }: IndexPageProps) {
-  console.log(nodes, 'nodes');
-  
-  console.log(allImages, 'allImages');
-  
-
+export default function AboutUsPage({ nodes, header, allImages, menu }: IndexPageProps) {
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -91,12 +87,14 @@ export async function getStaticProps(
     }
   )
 
+  const menu = await drupal.getMenu("main");
+
   return {
     props: {
       nodes,
       header,
       allImages,
-      
+      menu,
     },
   }
 }

@@ -11,13 +11,14 @@ import { deserialize } from "v8"
 
 interface IndexPageProps {
   header: any;
+  menu: any;
 }
 
-export default function SearchAiPage({ header }: IndexPageProps) {
-  
+export default function SearchAiPage({ header, menu }: IndexPageProps) {
+  const [searchTerm, setSearchTerm] = useState("");
   
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Search AI | EventHub</title>
         <meta
@@ -28,7 +29,17 @@ export default function SearchAiPage({ header }: IndexPageProps) {
       <div className="corePage">
         <div className="searchAi">
           <h1>Search AI</h1>
-          <p>Coming soon</p>
+
+          <div className="searchFields">
+            <input className="searchInput" type="text" placeholder="search for events or articles..." onChange={
+              (e) => setSearchTerm(e.target.value)
+            }/>
+            <input type="button" value="Search" onClick={() => {
+
+            }
+            } className="searchSelect"/>
+          </div>
+          <p className="noResults">Coming soon</p>
         </div>
       </div>
     </Layout>
@@ -38,53 +49,17 @@ export default function SearchAiPage({ header }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
-  // const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-  //   "node--event",
-  //   context,
-  //   { 
-  //     // order it on field_date
-  //     params: {
-  //       "filter[status]": 1,
-  //       "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
-  //       include: "node_type,uid,field_genre,field_country",
-  //       sort: "field_date",
-  //     },
-  //   }
-  // )
-
   const header = await drupal.getResource(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
-  // const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
-  //   "taxonomy_term--country",
-  //   context,
-  //   { 
-  //     params: {
-  //       "filter[status]": 1,
-  //       "fields[taxonomy_term--country]": "name",
-  //       include: "vid",
-  //     },
-  //   }
-  // )
-
-  // const taxonomyTermsGenre = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
-  //   "taxonomy_term--genre",
-  //   context,
-  //   { 
-  //     params: {
-  //       "filter[status]": 1,
-  //       "fields[taxonomy_term--genre]": "name",
-  //       include: "vid",
-  //     },
-  //   }
-  // )
+  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       header,
+      menu,
     },
   }
 }

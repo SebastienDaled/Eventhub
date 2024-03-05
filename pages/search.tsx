@@ -12,9 +12,10 @@ interface IndexPageProps {
   nodes: DrupalNode[];
   articles: DrupalNode[];
   header: any;
+  menu: any;
 }
 
-export default function SearchPage({ nodes, header, articles }: IndexPageProps) {
+export default function SearchPage({ nodes, header, articles, menu }: IndexPageProps) {
   const [events, setEvents] = useState(nodes);
   const [articlesNodes, setarticlesNodes] = useState(articles);
   const [filteredNodes, setFilteredNodes] = useState(nodes);
@@ -49,7 +50,7 @@ export default function SearchPage({ nodes, header, articles }: IndexPageProps) 
 
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Search | EventHub</title>
         <meta
@@ -126,13 +127,14 @@ export async function getStaticProps(
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
-  
+  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       nodes,
       articles,
       header,
+      menu,
     },
   }
 }

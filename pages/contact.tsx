@@ -13,11 +13,12 @@ import { useState } from "react"
 
 interface IndexPageProps {
   header: any;
+  menu: any;
 }
 
 
 
-export default function ContactPage({ header }: IndexPageProps) {
+export default function ContactPage({ header, menu }: IndexPageProps) {
   const [messageSuccess, setMessageSuccess] = useState(false)
   const [messageError, setMessageError] = useState(false)
 
@@ -48,7 +49,7 @@ export default function ContactPage({ header }: IndexPageProps) {
   }
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu} >
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -108,20 +109,6 @@ export default function ContactPage({ header }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
-  // const nodes = await drupal.getResource(
-  //   "node--page",
-  //   "609f5d4e-4e18-4cda-a252-f227c990d564",
-  //   { 
-  //     params: {
-  //       "filter[status]": 1,
-  //       "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body",
-  //       include: "node_type,uid",
-  //       sort: "-created",
-  //     },
-  //   }
-  // )  
-
   const header = await drupal.getResource(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
@@ -141,11 +128,12 @@ export async function getStaticProps(
     }
   )
   
+  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       header,
-      
+      menu,
     },
   }
 }

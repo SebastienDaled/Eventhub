@@ -12,13 +12,14 @@ import { json } from "stream/consumers"
 interface IndexPageProps {
   dates: any[];
   header: any;
+  menu: any;
 }
 
-export default function CalenderPage({ header, dates }: IndexPageProps) {
+export default function CalenderPage({ header, dates, menu }: IndexPageProps) {
   const dataDates = JSON.stringify(dates);
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu} >
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -67,10 +68,13 @@ export async function getStaticProps(
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
+  const menu = await drupal.getMenu("main");
+
   return {
     props: {
       dates,
       header,
+      menu,
     },
   }
 }

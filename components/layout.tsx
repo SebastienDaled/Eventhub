@@ -9,14 +9,14 @@ import { use, useEffect, useRef, useState } from "react";
 import { set } from "date-fns";
 import { time } from "console";
 
-export function Layout({ children, node }) {
+export function Layout({ children, node, menu }) {
   const [cart, setCart] = useState([]);
   const [cartAmount, setCartAmount] = useState(0);
   let bodeSummary = node.body[0].processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
 
   // get utl path
   const path = useRouter().pathname;
-
+  
   // references to the dom elements
   const mainNavRef = useRef(null);
   const extraNavRef = useRef(null);
@@ -131,26 +131,15 @@ export function Layout({ children, node }) {
                 </Link>
               </div>
               <div className="mainnav__links">
-                <Link href="/events" className={
-                  path === '/events' ? 'active' : ''
-                }>
-                  Events
-                </Link>
-                <Link href="/articles" className={
-                  path === '/articles' ? 'active' : ''
-                }>
-                  Articles
-                </Link>
-                <Link href="/search" className={
-                  path === '/search' ? 'active' : ''
-                }>
-                  Search
-                </Link>
-                <Link href="/calender" className={
-                  path === '/calender' ? 'active' : ''
-                }>
-                  Calender
-                </Link>
+                {menu.items.map((item, index) => {
+                  return (
+                    <Link href={item.url} key={index} className={
+                      path === item.url ? 'active' : ''
+                    }>
+                      {item.title}
+                    </Link>
+                  )
+                })}
               </div>
             </div>
           </div>

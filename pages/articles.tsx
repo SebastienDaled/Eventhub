@@ -10,11 +10,12 @@ import { NodeEventTeaser } from "components/node--event--teaser"
 interface IndexPageProps {
   nodes: any[];
   header: any;
+  menu: any;
 }
 
-export default function ArticlesPage({ nodes, header }: IndexPageProps) {
+export default function ArticlesPage({ nodes, header, menu }: IndexPageProps) {
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -26,20 +27,25 @@ export default function ArticlesPage({ nodes, header }: IndexPageProps) {
       <div className="corePage">
         <h1>Articles</h1>
 
-        {nodes?.length ? (
-          <div className="" id="">
-            <div className="upcomingevents" id="slider">
-              {nodes.map((node) => (
-                <div key={node.id}>
-                  <NodeArticleTeaser node={node} />
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <p className="py-4">No nodes found</p>
-        )}
+        <div>
+          <div className="articles" id="">
+          {nodes?.length ? (
 
+            nodes.map((node) => (
+              <div key={node.id}>
+                <NodeArticleTeaser node={node} />
+              </div>
+            ))
+
+            ) 
+            : 
+            (
+              <p className="py-4">No articles found</p>
+            )
+          }
+
+          </div>
+        </div>
       </div>
     </Layout>
   );
@@ -67,12 +73,13 @@ export async function getStaticProps(
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
-  
+  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       nodes,
       header,
+      menu,
     },
   }
 }

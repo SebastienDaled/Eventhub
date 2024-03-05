@@ -25,7 +25,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
         <div className="eventPage__header__image">
         <Image
             src={node.field_hero_image_source}
-            alt={node.field_hero_image_source.alt}
+            alt={`the hero image of ${node.title}`}
             width={3000}
             height={1000}
             sizes="(max-width: 3000px) 100vw, 3000px"

@@ -14,9 +14,10 @@ import { set } from "date-fns"
 interface IndexPageProps {
   nodes: DrupalNode[];
   header: any;
+  menu: any;
 }
 
-export default function CartPage({ nodes, header }: IndexPageProps) {
+export default function CartPage({ nodes, header, menu }: IndexPageProps) {
   const [cartItems, setCartItems] = useState([]);
   const [standardNodes, setStandardNodes] = useState(nodes);
 
@@ -145,7 +146,7 @@ export default function CartPage({ nodes, header }: IndexPageProps) {
 
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu} >
       <Head>
         <title>Shopping Cart | EventHub</title>
         <meta
@@ -184,7 +185,7 @@ export default function CartPage({ nodes, header }: IndexPageProps) {
           ) : (
             <p className="ticketFull">No items in the cart</p>
           )
-          }
+        }
         <h2 className="totalPrice">Total: €{cartItems.reduce((acc, item) => acc + item[0].price * item[0].amount, 0).toFixed(2)} </h2>
 
         <button className="btn" onClick={() => payCart()}>Pay</button>
@@ -217,10 +218,13 @@ export async function getStaticProps(
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
+  const menu = await drupal.getMenu("main");
+
   return {
     props: {
       nodes,
       header,
+      menu,
     },
   }
 }

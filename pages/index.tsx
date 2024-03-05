@@ -9,41 +9,19 @@ import { NodeEventTeaser } from "components/node--event--teaser"
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai"
 import { use, useEffect, useState } from "react"
 import { clear } from "console"
+import { Timer } from "lib/utils"
 
 interface IndexPageProps {
   nodes: DrupalNode[]
   header: any
   articles: DrupalNode[]
+  menu: any
 }
 
 
-export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
+export default function IndexPage({ nodes, header, articles, menu }: IndexPageProps) {
   const [eventsDisplayed, setEventsDisplayed] = useState(0);
 
-  function Timer(fn, t) {
-    let timerObj = setInterval(fn, t);
-
-    this.stop = function() {
-      if (timerObj) {
-        clearInterval(timerObj);
-        timerObj = null;
-      }
-      return this;
-    }
-
-    this.start = function() {
-      if (!timerObj) {
-        this.stop();
-        timerObj = setInterval(fn, t);
-      }
-      return this;
-    }
-
-    this.reset = function(newT = t) {
-      t = newT;
-      return this.stop().start();
-    }
-  }
   useEffect(() => {
     const slider = document.getElementById('slider');
     slider.style.transform = `translateX(-${eventsDisplayed * 33.7}%)`;
@@ -62,7 +40,7 @@ export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
 
   
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Next.js for Drupal</title>
         <meta
@@ -176,14 +154,16 @@ export async function getStaticProps(
     }
   )
   // console.log(header, 'header');
-
+  // const { menu, items } = await drupal.getMenu("main")
   
-
+  const menu = await drupal.getMenu("main");
+  
   return {
     props: {
       nodes,
       header,
-      articles
+      articles,
+      menu,
     },
   }
 }

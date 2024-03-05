@@ -14,10 +14,10 @@ interface IndexPageProps {
   header: any;
   taxonomyTermsCountry: any[];
   taxonomyTermsGenre: any[];
+  menu: any;
 }
 
-export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxonomyTermsGenre }: IndexPageProps) {
-  
+export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxonomyTermsGenre, menu }: IndexPageProps) {
   const [startPage, setStartPage] = useState(0);
   const [nodesArray, setNodesArray] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
@@ -28,6 +28,7 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
 
   const [extraGenreFilters, setExtraGenreFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  
   const maxNodes = 15;
 
   const maxPages = (maxNodes) => {
@@ -83,7 +84,7 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
   }, [nodes, startPage]);
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -313,12 +314,15 @@ export async function getStaticProps(
     }
   )
 
+  const menu = await drupal.getMenu("main");
+
   return {
     props: {
       nodes,
       header,
       taxonomyTermsCountry,
       taxonomyTermsGenre,
+      menu,
     },
   }
 }

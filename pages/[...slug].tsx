@@ -14,13 +14,14 @@ interface NodePageProps {
   resource: DrupalNode
   header: any
   related: any
+  menu: any
 }
 
-export default function NodePage({ resource, header, related }: NodePageProps) {
+export default function NodePage({ resource, header, related, menu }: NodePageProps) {
   if (!resource) return null
 
   return (
-    <Layout node={header}>
+    <Layout node={header} menu={menu}>
       <Head>
         <title>{resource.title}</title>
         <meta name="description" content="A Next.js site powered by Drupal." />
@@ -102,6 +103,7 @@ export async function getStaticProps(
       // order it on field_date
       params: {
         "filter[status]": 1,
+        "filter[field_past_date]": 0,
         "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
         include: "node_type,uid,field_genre,field_country",
         sort: "-field_date",
@@ -109,12 +111,15 @@ export async function getStaticProps(
     }
   )
 
+  const menu = await drupal.getMenu("main");
+
 
   return {
     props: {
       resource,
       header,
       related,
+      menu
     },
   }
 }
