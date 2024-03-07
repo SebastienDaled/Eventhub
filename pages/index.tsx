@@ -7,7 +7,7 @@ import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 import { NodeEventTeaser } from "components/node--event--teaser"
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai"
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import { clear } from "console"
 import { Timer } from "lib/utils"
 
@@ -21,6 +21,11 @@ interface IndexPageProps {
 
 export default function IndexPage({ nodes, header, articles, menu }: IndexPageProps) {
   const [eventsDisplayed, setEventsDisplayed] = useState(0);
+
+  const homeTitleRef = useRef(null);
+  const homeDescRef = useRef(null);
+  let bodeSummary = header.body[0].processed.replace(/<p>/g, '').replace(/<\/p>/g, '');
+
 
   useEffect(() => {
     const slider = document.getElementById('slider');
@@ -37,10 +42,19 @@ export default function IndexPage({ nodes, header, articles, menu }: IndexPagePr
       timer.stop();
     }
   }, [eventsDisplayed]);
-
+  
+  useEffect(() => {
+    if (homeTitleRef.current && homeDescRef.current) {
+      homeTitleRef.current.style.transform = 'translateY(0)';
+      homeTitleRef.current.style.opacity = '1';
+      homeDescRef.current.style.transform = 'translateY(0)';
+      homeDescRef.current.style.opacity = '1';
+    }
+  }, [homeTitleRef, homeDescRef]);
+  
   
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Next.js for Drupal</title>
         <meta
@@ -48,6 +62,18 @@ export default function IndexPage({ nodes, header, articles, menu }: IndexPagePr
           content="A Next.js site powered by a Drupal backend."
         />
       </Head>
+
+      <header>
+          <div className="assets">
+            <div className="circleSmall circleSmall--left"></div>
+            <div className="circleBig"></div>
+            <div className="circleSmall circleSmall--right"></div>
+          </div>
+          <div className="headerInfo">
+            <h1 ref={homeTitleRef}>{header.title}</h1>
+            <p ref={homeDescRef}>{bodeSummary}</p>
+          </div>
+      </header>
 
       <div className="topContainer">
         <h2 className="subtitle">Upcoming Events</h2>
@@ -97,19 +123,6 @@ export default function IndexPage({ nodes, header, articles, menu }: IndexPagePr
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-  //   "node--article",
-  //   context,
-  //   {
-  //     params: {
-  //       "filter[status]": 1,
-  //       "fields[node--article]": "title,path,field_image,uid,created",
-  //       include: "field_image,uid",
-  //       sort: "-created",
-  //     },
-  //   }
-  // )
-
   // node--event
   // max 3 events
   const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
@@ -136,8 +149,8 @@ export async function getStaticProps(
       params: {
         "filter[status]": 1,
         'page[limit]': 6,
-        "fields[node--article]": "title,path,field_image,uid,created,body,field_alinea",
-        include: "node_type,uid,field_image,field_alinea",
+        "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content",
+        include: "node_type,uid,field_image,field_article_content",
         sort: "-created",
       },
     }
@@ -153,8 +166,6 @@ export async function getStaticProps(
       },
     }
   )
-  // console.log(header, 'header');
-  // const { menu, items } = await drupal.getMenu("main")
   
   const menu = await drupal.getMenu("main");
   

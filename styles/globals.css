@@ -15,6 +15,7 @@ header{
 main{
   background-image: url('/images/main.jpg');
   color: var(--color-primary-300);
+  min-height: 80vh;
   background-size: 100%;
   background-repeat: repeat-y;
   overflow: hidden;
@@ -229,11 +230,7 @@ footer li + li {
   background-color: var(--color-primary-900-o);
   backdrop-filter: blur(10px);
   border-radius: 1.5rem;
-  /* perspective: 1000px; */
   box-shadow: inset 5px 0px 10px 0px rgba(8, 8, 8, 0.729);
-  /* -webkit-box-shadow: inset -5px -5px 11px 0px rgba(150,150,150,0.25);
-  -moz-box-shadow: inset -5px -5px 11px 0px rgba(150,150,150,0.25);
-  box-shadow: inset -5px -5px 11px 0px rgba(150,150,150,0.25); */
 }
 .eventcard__mask{
   width: 100%;
@@ -345,7 +342,7 @@ footer li + li {
 }
 .eventPage__title{
   position: absolute;
-  bottom: 17rem;
+  bottom: 30%;
   left: calc(10% + 2rem);
   font-size: 2rem;
   font-weight: 700;
@@ -560,7 +557,7 @@ footer li + li {
   border-top: 2px solid var(--color-primary-700);
   display: grid;
   gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   padding-top: 3rem;
 }
 .noResults{
@@ -608,65 +605,6 @@ footer li + li {
   transform: scale(1.2);
 }
 
-.form__container{
-  margin: 0 auto;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: 1.5fr 1fr;
-}
-.form__field{
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 2rem;
-}
-.form__label{
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-primary-100);
-  margin-bottom: .5rem;
-}
-.form__input{
-  padding: 1rem 1.5rem;
-  background-color: var(--color-primary-600-o);
-  backdrop-filter: blur(10px);
-  -webkit-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  -moz-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  box-shadow: inset 3px -4px 11px 0px rgba(150,150,150,0.35);
-  border-radius: 1.5rem;
-}
-.form__input::placeholder{
-  color: var(--color-primary-500);
-}
-.form__field textarea{
-  padding: 1rem 1.5rem;
-  background-color: var(--color-primary-600-o);
-  backdrop-filter: blur(10px);
-  -webkit-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  -moz-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  box-shadow: inset 3px -4px 11px 0px rgba(150,150,150,0.35);
-  border-radius: 1.5rem;
-  resize: none;
-  height: 15rem;
-}
-.btn__submit{
-  color: var(--color-primary-100);
-  padding: .5rem 1.5rem;
-  border-radius: 3rem;
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  transition: .5s ease-in-out;  
-  background-color: var(--color-primary-800-o);
-  backdrop-filter: blur(10px);
-  -webkit-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  -moz-box-shadow: inset -1px -1px 11px 0px rgba(150,150,150,0.35);
-  box-shadow: inset 3px -4px 11px 0px rgba(105, 105, 105, 0.35);
-  border-radius: 1.5rem;
-}
-.btn__submit:hover{
-  background-color: var(--color-primary-800);  
-}
 
 .asideArea{
   padding: 1rem 1.5rem;
@@ -778,6 +716,12 @@ footer li + li {
 
 
 .content__small > div{
+  /* display: grid;
+  gap: 4rem;
+  grid-template-columns: repeat(2, auto);
+  align-items: flex-start; */
+}
+.content__small_2{
   display: grid;
   gap: 4rem;
   grid-template-columns: repeat(2, auto);
@@ -789,12 +733,12 @@ footer li + li {
 .content__small>:nth-child(even){
   margin: 7rem 0;
 }
-.content__small>:nth-child(even) div{
+/* .content__small>:nth-child(even) div{
   order: 2;
-}
-.content__small>:nth-child(odd) div{
+} */
+/* .content__small>:nth-child(odd) div{
   margin: 0 0 0 auto;
-}
+} */
 .content__small img{
   border-radius: 2rem;
 }
@@ -952,4 +896,41 @@ footer li + li {
 }
 input[type="button"]{
   cursor: pointer;
+}
+
+.message{
+  font-size: 1rem;
+  background-color: rgba(255, 86, 86, 0.424);
+  border-radius: 1.5rem;
+  padding: 1rem;
+  height: 3.5rem;
+  grid-area: span 1 / span 2;
+}
+
+.message--success{
+  color: var(--color-primary-100);
+  background-color: rgba(86, 255, 86, 0.174);
+}
+.message--error{
+  color: var(--color-primary-100);
+  background-color: rgba(255, 86, 86, 0.424);
+}
+.iframe-container{
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%;
+
+}
+.responsive-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.paragraph__text{
+  max-width: 850px;
 }

@@ -1,55 +1,21 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
-
 import { drupal } from "lib/drupal"
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
-import Image from "next/image"
-import { absoluteUrl } from "lib/utils"
-import { resolveWebformContent, Webform } from 'nextjs-drupal-webform';
 import { useState } from "react"
+import Yaml from 'js-yaml';
+import { Webform } from "components/webform"
 
 interface IndexPageProps {
   header: any;
   menu: any;
+  webform: any;
+  resource: any;
 }
 
-
-
-export default function ContactPage({ header, menu }: IndexPageProps) {
-  const [messageSuccess, setMessageSuccess] = useState(false)
-  const [messageError, setMessageError] = useState(false)
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-
-    const response = await fetch(`/api/contact`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: event.target.name.value,
-        email: event.target.email.value,
-        subject: event.target.subject.value,
-        message: event.target.message.value,
-      }),
-    })
-
-    if (response.ok) {
-      // Show success.
-      setMessageSuccess(true)
-    }
-    else if (!response.ok) {
-      // Show error.
-      setMessageError(true)
-    }
-  }
-
+export default function ContactPage({ header, menu, webform, resource }: IndexPageProps) {
   return (
-    <Layout node={header} menu={menu} >
+    <Layout menu={menu} >
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -62,25 +28,7 @@ export default function ContactPage({ header, menu }: IndexPageProps) {
         <h1>Contact</h1>
 
         <div className="form__container">
-          <form onSubmit={handleSubmit}>
-            <div className="form__field">
-              <label htmlFor="name" className="form__label">Name</label>
-              <input type="text" id="name" name="name" className="form__input" placeholder="Fill in your name" required/>
-            </div>
-            <div className="form__field">
-              <label htmlFor="email" className="form__label">Email</label>
-              <input type="email" id="email" name="email" className="form__input" placeholder="Fill in your email" required />
-            </div>
-            <div className="form__field">
-              <label htmlFor="subject" className="form__label">Subject</label>
-              <input type="text" id="subject" name="subject" className="form__input" placeholder="Fill in the subject" required />
-            </div>
-            <div className="form__field">
-              <label htmlFor="message" className="form__label">Message</label>
-              <textarea id="message" name="message" className="form__input" placeholder="Fill in your message" required/>
-            </div>
-            <button type="submit" className="btn__submit">Submit</button>
-          </form>
+          <Webform element={webform} id={resource.title} />
 
           <div className="asideArea">
             <p>We value your feedback and are here to assist you. Feel free to reach out to us through the following channels:</p>
@@ -112,28 +60,23 @@ export async function getStaticProps(
   const header = await drupal.getResource(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-  console.log(header, 'header');
-
-  const allImages = await drupal.getResourceCollectionFromContext(
-    "file--file",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        "fields[file--file]": "filename,uri",
-        include: "uid",
-        sort: "-created",
-      },
-    }
-  )
+  );
   
   const menu = await drupal.getMenu("main");
 
+  const resource = await drupal.getResource(
+    'webform--webform',
+    "ddce9d01-3be3-4b39-877a-05a65504c9a0",
+  );
+  
+  const webform = await Yaml.load(resource.elements);
+  
   return {
     props: {
       header,
       menu,
+      webform,
+      resource,
     },
   }
 }

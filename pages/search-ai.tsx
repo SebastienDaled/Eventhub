@@ -10,15 +10,14 @@ import { use, useEffect, useState } from "react"
 import { deserialize } from "v8"
 
 interface IndexPageProps {
-  header: any;
   menu: any;
 }
 
-export default function SearchAiPage({ header, menu }: IndexPageProps) {
+export default function SearchAiPage({ menu }: IndexPageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Search AI | EventHub</title>
         <meta
@@ -58,7 +57,6 @@ export async function getStaticProps(
 
   return {
     props: {
-      header,
       menu,
     },
   }

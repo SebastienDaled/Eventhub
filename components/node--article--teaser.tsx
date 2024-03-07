@@ -25,7 +25,7 @@ export function NodeArticleTeaser({ node, ...props }: NodeArticleTeaserProps) {
         )}
         <div className="eventcard__info">
           <h2>{node.title}</h2>
-          <p>{node.field_alinea[0].field_text.substring(0, 150)}...</p>
+          <div dangerouslySetInnerHTML={{ __html: node.field_article_content[0].field_text.substring(0, 150)}} />
           <div className="eventcard__info__extra">
             <span>{formatDate(node.created)}</span>
           </div>

@@ -11,15 +11,14 @@ import { json } from "stream/consumers"
 
 interface IndexPageProps {
   dates: any[];
-  header: any;
   menu: any;
 }
 
-export default function CalenderPage({ header, dates, menu }: IndexPageProps) {
+export default function CalenderPage({ dates, menu }: IndexPageProps) {
   const dataDates = JSON.stringify(dates);
 
   return (
-    <Layout node={header} menu={menu} >
+    <Layout menu={menu} >
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -73,7 +72,6 @@ export async function getStaticProps(
   return {
     props: {
       dates,
-      header,
       menu,
     },
   }

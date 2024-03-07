@@ -11,14 +11,13 @@ import { absoluteUrl } from "lib/utils"
 
 interface IndexPageProps {
   nodes: any;
-  header: any;
   allImages: any;
   menu: any;
 }
 
-export default function AboutUsPage({ nodes, header, allImages, menu }: IndexPageProps) {
+export default function AboutUsPage({ nodes, allImages, menu }: IndexPageProps) {
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -68,12 +67,6 @@ export async function getStaticProps(
     }
   )  
 
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-  console.log(header, 'header');
-
   const allImages = await drupal.getResourceCollectionFromContext(
     "file--file",
     context,
@@ -92,7 +85,6 @@ export async function getStaticProps(
   return {
     props: {
       nodes,
-      header,
       allImages,
       menu,
     },

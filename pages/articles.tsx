@@ -9,13 +9,12 @@ import { NodeEventTeaser } from "components/node--event--teaser"
 
 interface IndexPageProps {
   nodes: any[];
-  header: any;
   menu: any;
 }
 
-export default function ArticlesPage({ nodes, header, menu }: IndexPageProps) {
+export default function ArticlesPage({ nodes, menu }: IndexPageProps) {
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -61,16 +60,11 @@ export async function getStaticProps(
     { 
       params: {
         "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created,body,field_alinea",
-        include: "node_type,uid,field_image,field_alinea.field_image",
+        "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content",
+        include: "node_type,uid,field_image,field_article_content.field_image",
         sort: "-created",
       },
     }
-  )
-
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
 
   const menu = await drupal.getMenu("main");
@@ -78,7 +72,6 @@ export async function getStaticProps(
   return {
     props: {
       nodes,
-      header,
       menu,
     },
   }

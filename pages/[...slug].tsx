@@ -1,27 +1,30 @@
 import { GetStaticPathsResult, GetStaticPropsResult } from "next"
 import Head from "next/head"
-import { DrupalNode } from "next-drupal"
+import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
 
 import { drupal } from "lib/drupal"
 import { NodeArticle } from "components/node--article"
 import { NodeBasicPage } from "components/node--basic-page"
 import { Layout } from "components/layout"
 import { NodeEvent } from "components/node--event"
+import { Webform } from "components/webform"
+import Yaml from 'js-yaml';
 
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
 interface NodePageProps {
   resource: DrupalNode
-  header: any
-  related: any
+  header: DrupalNode
+  related: DrupalNode[]
   menu: any
+  webform: any
 }
 
-export default function NodePage({ resource, header, related, menu }: NodePageProps) {
+export default function NodePage({ resource, header, related, menu, webform }: NodePageProps) {
   if (!resource) return null
 
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>{resource.title}</title>
         <meta name="description" content="A Next.js site powered by Drupal." />
@@ -29,6 +32,9 @@ export default function NodePage({ resource, header, related, menu }: NodePagePr
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} />}
       {resource.type === "node--event" && <NodeEvent node={resource} related={related} />} 
+      <div className="corePage">
+        {resource.type === "webform--webform" && <Webform element={webform} id={resource.title} />}
+      </div>
     </Layout>
   )
 }
@@ -56,8 +62,8 @@ export async function getStaticProps(
   let params = {}
   if (type === "node--article") {
     params = {
-      "fields[node--article]": "title,uid,body,field_image,field_alinea",
-      include: "field_image,uid,field_alinea.field_image",
+      "fields[node--article]": "title,uid,body,field_image,,field_article_content",
+      include: "field_image,uid,field_article_content.field_image",
     }
   }
   if (type === "node--event") {
@@ -91,7 +97,7 @@ export async function getStaticProps(
     }
   }
 
-  const header = await drupal.getResource(
+  const header = await drupal.getResource<DrupalNode>(
     "node--page",
     "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
   )
@@ -113,13 +119,15 @@ export async function getStaticProps(
 
   const menu = await drupal.getMenu("main");
 
-
+  const webform = await Yaml.load(resource.elements);
+  
   return {
     props: {
       resource,
       header,
       related,
-      menu
+      menu,
+      webform
     },
   }
 }

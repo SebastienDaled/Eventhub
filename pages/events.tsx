@@ -11,13 +11,12 @@ import { deserialize } from "v8"
 
 interface IndexPageProps {
   nodes: DrupalNode[];
-  header: any;
   taxonomyTermsCountry: any[];
   taxonomyTermsGenre: any[];
   menu: any;
 }
 
-export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxonomyTermsGenre, menu }: IndexPageProps) {
+export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsGenre, menu }: IndexPageProps) {
   const [startPage, setStartPage] = useState(0);
   const [nodesArray, setNodesArray] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
@@ -84,7 +83,7 @@ export default function EventsPage({ nodes, header, taxonomyTermsCountry, taxono
   }, [nodes, startPage]);
 
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -283,11 +282,6 @@ export async function getStaticProps(
     }
   )
 
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-
   const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
     "taxonomy_term--country",
     context,
@@ -319,7 +313,6 @@ export async function getStaticProps(
   return {
     props: {
       nodes,
-      header,
       taxonomyTermsCountry,
       taxonomyTermsGenre,
       menu,

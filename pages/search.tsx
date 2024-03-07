@@ -11,11 +11,10 @@ import { use, useEffect, useState } from "react"
 interface IndexPageProps {
   nodes: DrupalNode[];
   articles: DrupalNode[];
-  header: any;
   menu: any;
 }
 
-export default function SearchPage({ nodes, header, articles, menu }: IndexPageProps) {
+export default function SearchPage({ nodes, articles, menu }: IndexPageProps) {
   const [events, setEvents] = useState(nodes);
   const [articlesNodes, setarticlesNodes] = useState(articles);
   const [filteredNodes, setFilteredNodes] = useState(nodes);
@@ -50,7 +49,7 @@ export default function SearchPage({ nodes, header, articles, menu }: IndexPageP
 
 
   return (
-    <Layout node={header} menu={menu}>
+    <Layout menu={menu}>
       <Head>
         <title>Search | EventHub</title>
         <meta
@@ -103,7 +102,7 @@ export async function getStaticProps(
       params: {
         "filter[status]": 1,
         "filter[field_past_date]": 0,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_date,field_country,field_city",
+        "fields[node--event]": "title,path,field_image,uid,field_hero_image_source,field_date,field_country,field_city",
         include: "node_type,uid",
         sort: "field_date",
       },
@@ -116,8 +115,8 @@ export async function getStaticProps(
     { 
       params: {
         "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created,body,field_alinea",
-        include: "node_type,uid,field_image,field_alinea",
+        "fields[node--article]": "title,path,field_image,uid,created,field_article_content",
+        include: "node_type,uid,field_image,field_article_content.field_image",
         sort: "-created",
       },
     }
@@ -133,7 +132,6 @@ export async function getStaticProps(
     props: {
       nodes,
       articles,
-      header,
       menu,
     },
   }

@@ -39,3 +39,8 @@ export function Timer(fn, t) {
 if (typeof window !== "undefined" && localStorage.getItem('shoppingCart') === null) {
   localStorage.setItem('shoppingCart', "[]")
 }
+
+// get site language
+export function getSiteLanguage() {
+  return process.env.NEXT_PUBLIC_SITE_LANGUAGE
+}

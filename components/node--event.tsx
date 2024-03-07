@@ -29,8 +29,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
             width={3000}
             height={1000}
             sizes="(max-width: 3000px) 100vw, 3000px"
-            objectFit="cover"
-            objectPosition="center"
+            priority={true}
           />
         </div>
           <div className="eventPage__title">
