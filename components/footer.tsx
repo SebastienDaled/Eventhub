@@ -1,61 +1,45 @@
 import Link from "next/link"
 import { drupal } from "lib/drupal";
+import { useEffect, useState } from "react";
 
 export function Footer() {
+  const [topFooter, setTopFooter] = useState([]);
+  
+  useEffect(() => {
+    fetch('/api/menus/footer', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setTopFooter(data.topFooter.tree);
+      })
+  }, []);
+
+  if (topFooter.length === 0) return null;
+  
   return (
     <footer>
       <div className="mainFooter">
-        <div>
-          <Link href="/events"><h4>Events</h4></Link>
-          <ul>
-            <li>
-              <Link href="/events">Pop</Link>
-            </li>
-            <li>
-              <Link href="/events">Comedie</Link>
-            </li>
-            <li>
-              <Link href="/events">Hip Hop</Link>
-            </li>
-            <li>
-              <Link href="/events">Sports</Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <Link href="/articles"><h4>articles</h4></Link>
-          <ul>
-            <li>
-              <Link href="/events">Pop</Link>
-            </li>
-            <li>
-              <Link href="/events">Comedie</Link>
-            </li>
-            <li>
-              <Link href="/events">Hip Hop</Link>
-            </li>
-            <li>
-              <Link href="/events">Sports</Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4>Socials</h4>
-          <ul>
-            <li>
-              <Link href="/events">Instagram</Link>
-            </li>
-            <li>
-              <Link href="/events">Facebook</Link>
-            </li>
-            <li>
-              <Link href="/events">Twitter</Link>
-            </li>
-            <li>
-              <Link href="/events">LinkedIn</Link>
-            </li>
-          </ul>
-        </div>
+        {topFooter.map((item, index) => {
+          return (
+            <div key={index}>
+              <h4><Link href={item.url}>{item.title}</Link></h4>
+              <ul>
+                {item.items && item.items.map((child, index) => {
+                  return (
+                    <li key={index}>
+                      <Link href={child.url}>{child.title}</Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )
+        }
+        )}
       </div>
       <div className="bottomFooter">
         <div className="bottomFooter_block">
@@ -63,7 +47,6 @@ export function Footer() {
             <h1>EventHub <span className="extraInfoText">©2024 Sebastien Daled-Rosseel</span></h1>
           </div>
           <div className="bottomFooter_links">
-            {/* Cookieverklarin, Gebruiksvoorwaarden, Privacyverklaring, Cookie */}
             <Link href="/cookieverklaring">Cookieverklaring</Link>
             <Link href="/gebruiksvoorwaarden">Gebruiksvoorwaarden</Link>
             <Link href="/privacyverklaring">Privacyverklaring</Link>

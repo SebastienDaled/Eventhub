@@ -2,12 +2,20 @@ import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 
 import { absoluteUrl, formatDate } from "lib/utils"
+import { NodeArticleTeaser } from "./node--article--teaser"
 
 interface NodeArticleProps {
   node: DrupalNode
+  other?: DrupalNode[]
 }
 
-export function NodeArticle({ node, ...props }: NodeArticleProps) {  
+export function NodeArticle({ node, other, ...props }: NodeArticleProps) {  
+  other = other.filter((otherNode) => {
+    return otherNode.id !== node.id;
+  })
+
+  other.slice(0, 3);
+
   return (
     <>
       <div className="eventPage__header">
@@ -87,13 +95,58 @@ export function NodeArticle({ node, ...props }: NodeArticleProps) {
                   {content.type === "paragraph--text" && (
                     <div className="paragraph__text" dangerouslySetInnerHTML={{ __html: content.field_text }} />
                   )}
+
+                  {content.type === "paragraph--text_video_block" && (
+                    <div className="content__small_2">
+                      <div dangerouslySetInnerHTML={{ __html: content.field_text }} />
+                      <div className="iframe-container">
+                        <iframe
+                          src={content.field_video_link}
+                          frameBorder="0"
+                          allowFullScreen
+                          className="responsive-iframe"
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin"
+                        ></iframe>
+                      </div>
+                    </div>
+                  )}
+
+                  {content.type === "paragraph--video_text_block" && (
+                    <div className="content__small_2">
+                      <div className="iframe-container">
+                        <iframe
+                          src={content.field_video_link}
+                          frameBorder="0"
+                          allowFullScreen
+                          className="responsive-iframe"
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin"
+                        ></iframe>
+                      </div>
+                      <div dangerouslySetInnerHTML={{ __html: content.field_text }} />
+                    </div>
+                  )}
+
                 </div>
               )
             }
           ))}
         </div>
-        <input type="checkbox" name="" id="" />
         </article>
+
+        {other.length > 0 && (
+            <div className="eventPage__related">
+              <h2 className="subtitle">Other Articles</h2>
+              <div className="otherArticles" id="slider">
+                {other.map((node) => (
+                  <div key={node.id}>
+                    <NodeArticleTeaser node={node} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
       </div>
     </>
   )

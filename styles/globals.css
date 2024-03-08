@@ -3,6 +3,9 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+body{
+  background-color: var(--color-primary-800);
+}
 .body {
   overflow: hidden;
   font-family: "montserrat", sans-serif;
@@ -220,6 +223,15 @@ footer li + li {
   gap: 2rem;
   grid-template-columns: repeat(3, 1fr);
   padding-bottom: 5rem;
+}
+.otherArticles{
+  width: 100%;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  padding-bottom: 5rem;
+  margin-top: 5rem;
 }
 .eventcard{
   position: relative;
@@ -664,6 +676,7 @@ footer li + li {
   text-transform: lowercase;
   font-weight: 500;
   color: var(--color-primary-400);
+  display: block;
   padding: .3rem 0;
 }
 
@@ -724,7 +737,7 @@ footer li + li {
 .content__small_2{
   display: grid;
   gap: 4rem;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   align-items: flex-start;
 }
 .content__small div div{

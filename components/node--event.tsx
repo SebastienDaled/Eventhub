@@ -91,7 +91,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
               {node.field_seatmap_image_source && (
                 <Image
                 src={node.field_seatmap_image_source}
-                alt={node.field_seatmap_image_source.alt}
+                alt={"this is the seatmap image"}
                 width={3000}
                 height={100}
                 sizes="(max-width: 3000px) 100vw, 3000px"

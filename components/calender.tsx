@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isPast, add, addDays } from 'date-fns';
+import Link from 'next/link';
 
 export function Calender({ dates }) {
   const parsedDates = JSON.parse(dates);
@@ -13,6 +14,9 @@ export function Calender({ dates }) {
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
   });
+
+  const Month = currentMonth.getMonth();
+  const Year = currentMonth.getFullYear();
 
   const daysInWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   return (
@@ -34,13 +38,12 @@ export function Calender({ dates }) {
         </div>
         <div className='month'>
           {daysInMonth.map((day, index) => (
-            <div key={index} className='days'>
-              
+            <div key={index} className={`days ${isPast(new Date(Year, Month, (index + 2))) ? 'pastDay' : ''}`}>
               {eachDayOfInterval({ start: day, end: day }).map((d, idx) => (
                 <div key={idx} className={isSameMonth(d, currentMonth) ? '' : 'disabled'}>
                   <div>{format(d, 'd')}</div>
                   {parsedDates.map((event) =>
-                    isSameDay(d, new Date(event.date)) ? <div key={event.title} className='eventName'>{event.title}</div> : null
+                    isSameDay(d, new Date(event.date)) ? <Link href={`${event.path}`} key={event.title} className='eventName'>{event.title}</Link> : null
                   )}
                 </div>
               ))}

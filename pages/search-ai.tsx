@@ -1,23 +1,18 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode, DrupalSearchApiFacet, getSearchIndexFromContext } from "next-drupal"
+import { useState } from "react"
 
-import { drupal } from "lib/drupal"
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
-import { use, useEffect, useState } from "react"
-import { deserialize } from "v8"
 
 interface IndexPageProps {
-  menu: any;
+
 }
 
-export default function SearchAiPage({ menu }: IndexPageProps) {
+export default function SearchAiPage({  }: IndexPageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Search AI | EventHub</title>
         <meta
@@ -48,16 +43,10 @@ export default function SearchAiPage({ menu }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-
-  const menu = await drupal.getMenu("main");
 
   return {
     props: {
-      menu,
+
     },
   }
 }

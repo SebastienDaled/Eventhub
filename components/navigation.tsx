@@ -2,7 +2,7 @@ import Link from "next/link"
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export function Navigation( {menu} ) {
+export function Navigation() {
   const [cart, setCart] = useState([]);
   const [cartAmount, setCartAmount] = useState(0);
 
@@ -13,8 +13,23 @@ export function Navigation( {menu} ) {
 
   const path = useRouter().pathname;
 
+  const [mainMenuData, setMainMenuData] = useState([]);
+  const [extraMenuData, setExtraMenuData] = useState([]);
 
-
+  useEffect(() => {
+    fetch('/api/menu', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMainMenuData(data.main.tree);
+        setExtraMenuData(data.extra.tree);
+      })
+  }, []);
+    
   useEffect(() => {
     if (typeof window !== "undefined") {
       setCart(JSON.parse(localStorage.getItem('shoppingCart')));
@@ -86,8 +101,9 @@ export function Navigation( {menu} ) {
     );
   }, [navRef, extraNavRef, mainNavRef]);
 
-  return (
-    <div className="nav" ref={navRef}>
+
+  if (!mainMenuData && !extraMenuData) return (
+    <div className="nav" ref={navRef} style={{visibility: "hidden"}}>
       <div className="extranav" ref={extraNavRef}>
         <Link href="/about-us" className={
             path === '/about-us' ? 'activeSmall' : ''
@@ -114,7 +130,48 @@ export function Navigation( {menu} ) {
           </Link>
         </div>
         <div className="mainnav__links">
-          {menu.items.map((item, index) => {
+          {mainMenuData.map((item, index) => {
+            return (
+              <Link href={item.url} key={index} className={
+                path === item.url ? 'active' : ''
+              }>
+                {item.title}
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="nav" ref={navRef}>
+      <div className="extranav" ref={extraNavRef}>
+        {extraMenuData.map((item, index) => {
+          return (
+            <Link href={item.url} key={index} className={
+              path === item.url ? 'activeSmall' : ''
+            }>
+              {item.title}
+            </Link>
+          )
+        })}
+        <Link href="/cart" className={
+            path === '/cart' ? 'activeSmall' : ''
+          }>
+          &#x1F6D2;
+        </Link>
+        <span className="subText" ref={amountRef}>{cartAmount}</span>
+      </div>
+
+      <div className="mainnav" ref={mainNavRef}>
+        <div className="mainnav__home">
+          <Link href="/">
+            <h1>EventHub</h1>
+          </Link>
+        </div>
+        <div className="mainnav__links">
+          {mainMenuData.map((item, index) => {
             return (
               <Link href={item.url} key={index} className={
                 path === item.url ? 'active' : ''

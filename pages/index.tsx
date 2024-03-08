@@ -1,25 +1,23 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
+import { useEffect, useRef, useState } from "react"
 
 import { drupal } from "lib/drupal"
+import { DrupalNode } from "next-drupal"
+
 import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 import { NodeEventTeaser } from "components/node--event--teaser"
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai"
-import { use, useEffect, useRef, useState } from "react"
-import { clear } from "console"
 import { Timer } from "lib/utils"
 
 interface IndexPageProps {
   nodes: DrupalNode[]
   header: any
   articles: DrupalNode[]
-  menu: any
 }
 
 
-export default function IndexPage({ nodes, header, articles, menu }: IndexPageProps) {
+export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
   const [eventsDisplayed, setEventsDisplayed] = useState(0);
 
   const homeTitleRef = useRef(null);
@@ -54,7 +52,7 @@ export default function IndexPage({ nodes, header, articles, menu }: IndexPagePr
   
   
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Next.js for Drupal</title>
         <meta
@@ -167,14 +165,11 @@ export async function getStaticProps(
     }
   )
   
-  const menu = await drupal.getMenu("main");
-  
   return {
     props: {
       nodes,
       header,
       articles,
-      menu,
     },
   }
 }

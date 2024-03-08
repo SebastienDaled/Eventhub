@@ -1,24 +1,21 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
 
+import { DrupalNode } from "next-drupal"
 import { drupal } from "lib/drupal"
+
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
 import { Calender } from "components/calender"
-import { json } from "stream/consumers"
 
 interface IndexPageProps {
   dates: any[];
-  menu: any;
 }
 
-export default function CalenderPage({ dates, menu }: IndexPageProps) {
+export default function CalenderPage({ dates }: IndexPageProps) {
   const dataDates = JSON.stringify(dates);
 
   return (
-    <Layout menu={menu} >
+    <Layout>
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -47,32 +44,25 @@ export async function getStaticProps(
     { 
       params: {
         "filter[status]": 1,
-        "fields[node--article]": "title,field_date",
+        "fields[node--article]": "title,field_date,slug,path",
         include: "node_type,uid",
         sort: "-created",
       },
     }
   )
-  // get only the dates on field_date
+  
   const dates = nodes.map((node) => {
     // only return the date and title
     return {
       date: node.field_date,
       title: node.title,
+      path: node.path.alias,
     }
   })
-  
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-
-  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       dates,
-      menu,
     },
   }
 }

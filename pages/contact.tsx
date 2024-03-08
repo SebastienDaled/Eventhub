@@ -1,21 +1,20 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
+
 import { drupal } from "lib/drupal"
+
 import { Layout } from "components/layout"
-import { useState } from "react"
-import Yaml from 'js-yaml';
 import { Webform } from "components/webform"
 
+import Yaml from 'js-yaml';
 interface IndexPageProps {
-  header: any;
-  menu: any;
   webform: any;
   resource: any;
 }
 
-export default function ContactPage({ header, menu, webform, resource }: IndexPageProps) {
+export default function ContactPage({ webform, resource }: IndexPageProps) {
   return (
-    <Layout menu={menu} >
+    <Layout>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -57,12 +56,6 @@ export default function ContactPage({ header, menu, webform, resource }: IndexPa
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  );
-  
-  const menu = await drupal.getMenu("main");
 
   const resource = await drupal.getResource(
     'webform--webform',
@@ -73,8 +66,6 @@ export async function getStaticProps(
   
   return {
     props: {
-      header,
-      menu,
       webform,
       resource,
     },

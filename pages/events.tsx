@@ -1,22 +1,22 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode, DrupalSearchApiFacet, getSearchIndexFromContext } from "next-drupal"
+import { useEffect, useState } from "react"
 
 import { drupal } from "lib/drupal"
+import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
+
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
 import { NodeEventTeaser } from "components/node--event--teaser"
-import { use, useEffect, useState } from "react"
-import { deserialize } from "v8"
 
 interface IndexPageProps {
   nodes: DrupalNode[];
   taxonomyTermsCountry: any[];
   taxonomyTermsGenre: any[];
-  menu: any;
 }
 
-export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsGenre, menu }: IndexPageProps) {
+export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsGenre }: IndexPageProps) {
+  console.log(nodes, 'nodes');
+  
   const [startPage, setStartPage] = useState(0);
   const [nodesArray, setNodesArray] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
@@ -27,7 +27,7 @@ export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsG
 
   const [extraGenreFilters, setExtraGenreFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const maxNodes = 15;
 
   const maxPages = (maxNodes) => {
@@ -83,7 +83,7 @@ export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsG
   }, [nodes, startPage]);
 
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -281,7 +281,8 @@ export async function getStaticProps(
       },
     }
   )
-
+  
+    
   const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
     "taxonomy_term--country",
     context,
@@ -308,14 +309,11 @@ export async function getStaticProps(
     }
   )
 
-  const menu = await drupal.getMenu("main");
-
   return {
     props: {
       nodes,
       taxonomyTermsCountry,
       taxonomyTermsGenre,
-      menu,
     },
   }
 }

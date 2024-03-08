@@ -1,20 +1,20 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
+
 
 import { drupal } from "lib/drupal"
+import { DrupalNode } from "next-drupal"
+
 import { Layout } from "components/layout"
 import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
 
 interface IndexPageProps {
   nodes: any[];
-  menu: any;
 }
 
-export default function ArticlesPage({ nodes, menu }: IndexPageProps) {
+export default function ArticlesPage({ nodes }: IndexPageProps) {
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Articles | EventHub</title>
         <meta
@@ -67,12 +67,9 @@ export async function getStaticProps(
     }
   )
 
-  const menu = await drupal.getMenu("main");
-
   return {
     props: {
       nodes,
-      menu,
     },
   }
 }

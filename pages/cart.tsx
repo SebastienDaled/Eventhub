@@ -1,22 +1,17 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode, DrupalSearchApiFacet, getSearchIndexFromContext } from "next-drupal"
+import { useEffect, useState } from "react"
 
 import { drupal } from "lib/drupal"
+import { DrupalNode } from "next-drupal"
+
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
-import { use, useEffect, useState } from "react"
-import { deserialize } from "v8"
-import { log } from "console"
-import { set } from "date-fns"
 
 interface IndexPageProps {
   nodes: DrupalNode[];
-  menu: any;
 }
 
-export default function CartPage({ nodes, menu }: IndexPageProps) {
+export default function CartPage({ nodes }: IndexPageProps) {
   const [cartItems, setCartItems] = useState([]);
   const [standardNodes, setStandardNodes] = useState(nodes);
 
@@ -145,7 +140,7 @@ export default function CartPage({ nodes, menu }: IndexPageProps) {
 
 
   return (
-    <Layout menu={menu} >
+    <Layout >
       <Head>
         <title>Shopping Cart | EventHub</title>
         <meta
@@ -182,7 +177,9 @@ export default function CartPage({ nodes, menu }: IndexPageProps) {
             }
           )
           ) : (
-            <p className="ticketFull">No items in the cart</p>
+            <div>
+              <p className="ticketFull">No items in the cart</p>
+            </div>
           )
         }
         <h2 className="totalPrice">Total: €{cartItems.reduce((acc, item) => acc + item[0].price * item[0].amount, 0).toFixed(2)} </h2>
@@ -212,12 +209,9 @@ export async function getStaticProps(
     }
   )
 
-  const menu = await drupal.getMenu("main");
-
   return {
     props: {
       nodes,
-      menu,
     },
   }
 }

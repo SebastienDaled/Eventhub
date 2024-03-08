@@ -10,12 +10,12 @@ import { set } from "date-fns";
 import { time } from "console";
 import { Navigation } from "./navigation";
 
-export function Layout({ children, menu }) {
+export function Layout({ children }) {
   return (
     <>
       <PreviewAlert />
       <div className="">
-        <Navigation menu={menu} />
+        <Navigation />
         
         <main>{children}</main>
 

@@ -1,23 +1,20 @@
 import Head from "next/head"
+import Image from "next/image"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
 
 import { drupal } from "lib/drupal"
+
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
-import { NodeEventTeaser } from "components/node--event--teaser"
-import Image from "next/image"
 import { absoluteUrl } from "lib/utils"
 
 interface IndexPageProps {
   nodes: any;
   allImages: any;
-  menu: any;
 }
 
-export default function AboutUsPage({ nodes, allImages, menu }: IndexPageProps) {
+export default function AboutUsPage({ nodes, allImages }: IndexPageProps) {
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Events | EventHub</title>
         <meta
@@ -80,13 +77,10 @@ export async function getStaticProps(
     }
   )
 
-  const menu = await drupal.getMenu("main");
-
   return {
     props: {
       nodes,
       allImages,
-      menu,
     },
   }
 }

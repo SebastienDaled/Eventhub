@@ -1,20 +1,20 @@
 import Head from "next/head"
 import { GetStaticPropsResult } from "next"
-import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
+import { useEffect, useState } from "react"
 
+import { DrupalNode } from "next-drupal"
 import { drupal } from "lib/drupal"
+
 import { Layout } from "components/layout"
-import { NodeArticleTeaser } from "components/node--article--teaser"
 import { NodeEventTeaser } from "components/node--event--teaser"
-import { use, useEffect, useState } from "react"
+import { NodeArticleTeaser } from "components/node--article--teaser"
 
 interface IndexPageProps {
   nodes: DrupalNode[];
   articles: DrupalNode[];
-  menu: any;
 }
 
-export default function SearchPage({ nodes, articles, menu }: IndexPageProps) {
+export default function SearchPage({ nodes, articles }: IndexPageProps) {
   const [events, setEvents] = useState(nodes);
   const [articlesNodes, setarticlesNodes] = useState(articles);
   const [filteredNodes, setFilteredNodes] = useState(nodes);
@@ -49,7 +49,7 @@ export default function SearchPage({ nodes, articles, menu }: IndexPageProps) {
 
 
   return (
-    <Layout menu={menu}>
+    <Layout>
       <Head>
         <title>Search | EventHub</title>
         <meta
@@ -94,7 +94,6 @@ export default function SearchPage({ nodes, articles, menu }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
   const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
     "node--event",
     context,
@@ -121,18 +120,11 @@ export async function getStaticProps(
       },
     }
   )
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-  )
-
-  const menu = await drupal.getMenu("main");
 
   return {
     props: {
       nodes,
       articles,
-      menu,
     },
   }
 }
