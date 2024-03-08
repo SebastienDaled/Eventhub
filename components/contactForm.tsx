@@ -2,11 +2,6 @@ import * as React from 'react';
 
 import { resolveWebformContent, Webform } from 'nextjs-drupal-webform';
 
-import { GetStaticPathsContext } from 'next/types';
-
-import { GetStaticPathsResult } from 'next';
-
-import { useRouter } from 'next/router';
 import { drupal } from 'lib/drupal';
 
 

@@ -1,6 +1,3 @@
-import Link from "next/link"
-import { drupal } from "lib/drupal";
-
 export function Header({ node }) {
   console.log(node);
   

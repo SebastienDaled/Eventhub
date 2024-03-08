@@ -1,6 +1,4 @@
-import { parse } from 'path';
 import { useRef, useState } from 'react';
-import { json } from 'stream/consumers';
 
 export function BtnTickets({ node_id}) {
   const [tickets, setTickets] = useState("1");

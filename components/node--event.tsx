@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 
-import { absoluteUrl, formatDate } from "lib/utils"
+import { formatDate } from "lib/utils"
 import { NodeEventTeaser } from "./node--event--teaser"
 import { BtnTickets } from "./btn--buy-tickets"
 

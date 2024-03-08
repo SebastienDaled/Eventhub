@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 
-import { absoluteUrl, formatDate } from "lib/utils"
+import { absoluteUrl } from "lib/utils"
 import { NodeArticleTeaser } from "./node--article--teaser"
 
 interface NodeArticleProps {

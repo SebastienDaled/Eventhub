@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { drupal } from "lib/drupal";
 import { useEffect, useState } from "react";
 
 export function Footer() {
