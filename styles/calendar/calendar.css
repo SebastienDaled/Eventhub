@@ -1,3 +1,11 @@
 .pastDay{
-  opacity: 0.4;
+  opacity: 0.6;
+  background-color: #ce4c4c15;
+}
+.otherMontsDay{
+  background-color: #ce4c4c15;
+  opacity: 0.1;
+}
+.sameDay{
+  border: 5px solid #ce4c4c75;
 }
