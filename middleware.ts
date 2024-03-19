@@ -28,7 +28,8 @@ export async function middleware(request: NextRequest) {
 
   if (!token) {
     if (
-      pathname.includes("/api/favourite")
+      pathname.includes("/api/favourite") ||
+      pathname.includes("/api/comments")
     ) {
       return Response.json(
         { success: false, message: "authentication failed" },
@@ -44,5 +45,6 @@ export const config = {
     "/favourites",
     "/account",
     "/api/favourite",
+    "/api/comments",
   ],
 };

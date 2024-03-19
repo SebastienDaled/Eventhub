@@ -12,15 +12,15 @@ interface NodeArticleProps {
 }
 
 export function NodeArticle({ node, other, comments, ...props }: NodeArticleProps) {  
-  console.log(comments, 'comments');
-  
   other = other.filter((otherNode) => {
     return otherNode.id !== node.id;
   })
 
   other.slice(0, 3);
 
-  console.log(node);
+  const commentTimaAgo = comments.map((comment) => {
+    return timeAgo(comment.created);
+  });
 
 
   return (
@@ -32,7 +32,7 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
             alt={`The hero image of ${node.field_image[0].alt}`}
             width={3000}
             height={1000}
-            sizes="(max-width: 3000px) 100vw, 3000px"
+            sizes="(max-width: 187.5rem) 100vw, 187.5rem"
             priority={true}
           />
         </div>
@@ -58,7 +58,7 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
                           alt={`image for ${content.field_image.alt}`}
                           width={3000}
                           height={1000}
-                          sizes="(max-width: 3000px) 100vw, 3000px"
+                          sizes="(max-width: 187.5rem) 100vw, 187.5rem"
                       />
                       </div>
                   )}
@@ -70,7 +70,7 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
                         alt={`image for ${content.field_image.alt}`}
                         width={3000}
                         height={1000}
-                        sizes="(max-width: 3000px) 100vw, 3000px"
+                        sizes="(max-width: 187.5rem) 100vw, 187.5rem"
                       />
                       <div dangerouslySetInnerHTML={{ __html: content.field_text }} />
                     </div>
@@ -95,7 +95,7 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
                     alt={`image for ${content.field_image.alt}`}
                     width={3000}
                     height={1000}
-                    sizes="(max-width: 3000px) 100vw, 3000px"
+                    sizes="(max-width: 187.5rem) 100vw, 187.5rem"
                   />
                   )}
 
@@ -143,21 +143,18 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
 
         <CommentForm id={node.id}/>
 
-
         {comments && comments.length > 0 && (
-          comments.map((comment) => (
+          comments.slice(0, 5).map((comment, indx) => (
             <div key={comment.id} className="comment">
-              <div>
+              <div className="comment__header">
                 <h4>{comment.uid.display_name}</h4>
-                <p>{timeAgo(comment.created)}</p>
+                <p className="comment__header__time">{commentTimaAgo[indx]}</p>
               </div>
-              <h3>{comment.subject}</h3>
-              <div dangerouslySetInnerHTML={{ __html: comment.comment_body.value }} />
-              {/* show how long ago it was made */}
+              <h3 className="comment_title">{comment.subject}</h3>
+              <div className="comment__body" dangerouslySetInnerHTML={{ __html: comment.comment_body.value }} />
             </div>
           ))
         )}  
-        
         </article>
 
         {other.length > 0 && (

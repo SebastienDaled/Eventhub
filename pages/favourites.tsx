@@ -48,21 +48,19 @@ export default function FavouritesPage({ nodes }: IndexPageProps) {
       <div className="corePage">
         <h1>Favourites</h1>
 
-        <div className="">
-          {fvouredNodes?.length ? (
-            <div className="searchresults" id="">
-              <div className="upcomingevents" id="slider">
-                {fvouredNodes.map((node) => (
-                  <div key={node.id}>
-                    <NodeEventTeaser node={node} />
-                  </div>
-                ))}
-              </div>
+        {fvouredNodes?.length ? (
+          <div className="searchresults" id="">
+            <div className="upcomingevents" id="slider">
+              {fvouredNodes.map((node) => (
+                <div key={node.id}>
+                  <NodeEventTeaser node={node} />
+                </div>
+              ))}
             </div>
-          ) : (
-            <p className="py-4">No nodes found</p>
-          )}
-        </div>
+          </div>
+        ) : (
+          <p className="py-4">You have no favourites</p>
+        )}
       </div>
     </Layout>
   );

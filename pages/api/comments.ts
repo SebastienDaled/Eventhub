@@ -10,7 +10,7 @@ export default async function handler(
 ) {
   try {
     if (request.method === "POST") {
-      console.log(request, 'response auth.ts');
+      console.log(request.body, 'response auth.ts');
       
       createComment(request.body);
 
