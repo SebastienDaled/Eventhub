@@ -38,7 +38,7 @@
   resize: none;
   height: 15rem;
 }
-select {
+.form__select {
   padding: 1rem 1.5rem;
   background-color: var(--color-primary-600-o);
   backdrop-filter: blur(10px);

@@ -11,6 +11,7 @@ const nextConfig = {
       'maps.ticketmaster.com',
       'via.placeholder.com',
       'www.youtube.com/watch',
+      "images.universe.com",
     ],
   },
   sassOptions: {

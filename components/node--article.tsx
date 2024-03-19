@@ -1,20 +1,27 @@
 import Image from "next/image"
 import { DrupalNode } from "next-drupal"
 
-import { absoluteUrl } from "lib/utils"
+import { absoluteUrl, formatDate, timeAgo } from "lib/utils"
 import { NodeArticleTeaser } from "./node--article--teaser"
+import { CommentForm } from "./commentform"
 
 interface NodeArticleProps {
   node: DrupalNode
   other?: DrupalNode[]
+  comments?: any
 }
 
-export function NodeArticle({ node, other, ...props }: NodeArticleProps) {  
+export function NodeArticle({ node, other, comments, ...props }: NodeArticleProps) {  
+  console.log(comments, 'comments');
+  
   other = other.filter((otherNode) => {
     return otherNode.id !== node.id;
   })
 
   other.slice(0, 3);
+
+  console.log(node);
+
 
   return (
     <>
@@ -133,6 +140,24 @@ export function NodeArticle({ node, other, ...props }: NodeArticleProps) {
             }
           ))}
         </div>
+
+        <CommentForm id={node.id}/>
+
+
+        {comments && comments.length > 0 && (
+          comments.map((comment) => (
+            <div key={comment.id} className="comment">
+              <div>
+                <h4>{comment.uid.display_name}</h4>
+                <p>{timeAgo(comment.created)}</p>
+              </div>
+              <h3>{comment.subject}</h3>
+              <div dangerouslySetInnerHTML={{ __html: comment.comment_body.value }} />
+              {/* show how long ago it was made */}
+            </div>
+          ))
+        )}  
+        
         </article>
 
         {other.length > 0 && (

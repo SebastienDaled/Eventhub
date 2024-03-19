@@ -2,7 +2,7 @@ import Head from "next/head"
 import { GetStaticPropsResult } from "next"
 
 
-import { drupal } from "lib/drupal"
+import { articleTeaser, drupal } from "lib/drupal"
 import { DrupalNode } from "next-drupal"
 
 import { Layout } from "components/layout"
@@ -53,19 +53,8 @@ export default function ArticlesPage({ nodes }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
-  const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--article",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content",
-        include: "node_type,uid,field_image,field_article_content.field_image",
-        sort: "-created",
-      },
-    }
-  )
+  // articleTeasers
+  const nodes = await articleTeaser(context, 50);
 
   return {
     props: {

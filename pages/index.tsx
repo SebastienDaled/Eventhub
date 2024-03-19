@@ -2,7 +2,7 @@ import Head from "next/head"
 import { GetStaticPropsResult } from "next"
 import { useEffect, useRef, useState } from "react"
 
-import { drupal } from "lib/drupal"
+import { articleTeaser, drupal, eventTeaser, headerIndex } from "lib/drupal"
 import { DrupalNode } from "next-drupal"
 
 import { Layout } from "components/layout"
@@ -121,49 +121,16 @@ export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
-  // max 3 events
-  const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--event",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        "filter[field_past_date]": 0,
-        'page[limit]': 9,
-        "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date",
-        include: "node_type,uid",
-        // ascending
-        sort: "field_date",
+  const nodes = await eventTeaser(context, 9);
 
-      },
-    }
-  )
+  const articles = await articleTeaser(context, 6);
 
-  const articles = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--article",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        'page[limit]': 6,
-        "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content",
-        include: "node_type,uid,field_image,field_article_content",
-        sort: "-created",
-      },
-    }
-  )
+  const header = await headerIndex();
 
-
-  const header = await drupal.getResource(
-    "node--page",
-    "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
-    {
-      params: {
-        "fields[node--page]": "title,body",
-      },
-    }
-  )
+  // const userToken = await drupal.getAccessToken({
+  //   clientId: "c612d27e-9599-46c3-a006-331b6162552d",
+  //   clientSecret: "admin",
+  // })
   
   return {
     props: {

@@ -100,7 +100,7 @@ export function Webform ({ element, id }) {
                     [fieldName]: event.target.value,
                   };
                 });
-              }}>
+              }} className='form__select'>
                 <option selected disabled>Select an option</option>
                 {Object.keys(field['#options']).map((option) => {
                   return (

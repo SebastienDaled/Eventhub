@@ -2,7 +2,7 @@ import Head from "next/head"
 import { GetStaticPathsResult, GetStaticPropsResult } from "next"
 
 import { DrupalNode } from "next-drupal"
-import { drupal } from "lib/drupal"
+import { drupal, getComments } from "lib/drupal"
 
 import { Layout } from "components/layout"
 import { NodeArticle } from "components/node--article"
@@ -18,9 +18,10 @@ interface NodePageProps {
   resource: DrupalNode
   related: DrupalNode[]
   webform: any
+  comments: any
 }
 
-export default function NodePage({ resource, related, webform }: NodePageProps) {
+export default function NodePage({ resource, related, webform, comments }: NodePageProps) {
   if (!resource) return null
 
   return (
@@ -30,7 +31,7 @@ export default function NodePage({ resource, related, webform }: NodePageProps) 
         <meta name="description" content="A Next.js site powered by Drupal." />
       </Head>
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
-      {resource.type === "node--article" && <NodeArticle node={resource} other={related} />}
+      {resource.type === "node--article" && <NodeArticle node={resource} other={related} comments={comments}/>}
       {resource.type === "node--event" && <NodeEvent node={resource} related={related} />} 
      
         {resource.type === "webform--webform" &&  <div className="corePage"><Webform element={webform} id={resource.title} /></div>}
@@ -62,7 +63,7 @@ export async function getStaticProps(
   let params = {}
   if (type === "node--article") {
     params = {
-      "fields[node--article]": "title,uid,body,field_image,,field_article_content",
+      "fields[node--article]": "title,uid,body,field_image,,field_article_content,field_comments",
       include: "field_image,uid,field_article_content.field_image",
     }
   }
@@ -115,7 +116,7 @@ export async function getStaticProps(
     other.type = "node--article";
     other.params = {
       "filter[status]": 1,
-      "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content",
+      "fields[node--article]": "title,path,field_image,uid,created,body,field_article_content,field_comments",
       include: "node_type,uid,field_image,field_article_content.field_image",
       sort: "-created",
     }
@@ -131,11 +132,18 @@ export async function getStaticProps(
 
   const webform = await Yaml.load(resource.elements);
   
+
+  console.log(resource.id);
+  
+  const comments = await getComments(context, resource.id);
+  
+  
   return {
     props: {
       resource,
       related,
-      webform
+      webform,
+      comments,
     },
   }
 }

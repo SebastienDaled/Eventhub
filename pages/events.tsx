@@ -2,7 +2,7 @@ import Head from "next/head"
 import { GetStaticPropsResult } from "next"
 import { useEffect, useState } from "react"
 
-import { drupal } from "lib/drupal"
+import { drupal, eventTeaser, taxTermCountry, taxTermGenre } from "lib/drupal"
 import { DrupalMenuLinkContent, DrupalNode } from "next-drupal"
 
 import { Layout } from "components/layout"
@@ -266,48 +266,11 @@ export default function EventsPage({ nodes, taxonomyTermsCountry, taxonomyTermsG
 export async function getStaticProps(
   context
 ): Promise<GetStaticPropsResult<IndexPageProps>> {
-  // node--event
-  const nodes = await drupal.getResourceCollectionFromContext<DrupalNode[]>(
-    "node--event",
-    context,
-    { 
-      // order it on field_date
-      params: {
-        "filter[status]": 1,
-        "filter[field_past_date]": 0,
-        "fields[node--event]": "title,path,uid,field_hero_image_source,field_genre,field_country,field_date,field_city",
-        include: "node_type,uid,field_genre,field_country",
-        sort: "field_date",
-      },
-    }
-  )
-  
+  const nodes = await eventTeaser(context, 50);
     
-  const taxonomyTermsCountry = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
-    "taxonomy_term--country",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        "fields[taxonomy_term--country]": "name",
-        include: "vid",
-        sort: "name",
-      },
-    }
-  )
+  const taxonomyTermsCountry = await taxTermCountry(context);
 
-  const taxonomyTermsGenre = await drupal.getResourceCollectionFromContext<DrupalMenuLinkContent[]>(
-    "taxonomy_term--genre",
-    context,
-    { 
-      params: {
-        "filter[status]": 1,
-        "fields[taxonomy_term--genre]": "name",
-        include: "vid",
-        sort: "name",
-      },
-    }
-  )
+  const taxonomyTermsGenre = await taxTermGenre(context);
 
   return {
     props: {

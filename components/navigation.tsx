@@ -1,10 +1,11 @@
 import Link from "next/link"
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 
 export function Navigation() {
   const [cart, setCart] = useState([]);
   const [cartAmount, setCartAmount] = useState(0);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   const mainNavRef = useRef(null);
   const extraNavRef = useRef(null);
@@ -15,6 +16,12 @@ export function Navigation() {
 
   const [mainMenuData, setMainMenuData] = useState([]);
   const [extraMenuData, setExtraMenuData] = useState([]);
+  const [userMenuData, setUserMenuData] = useState([]);
+
+  useEffect(() => {
+    localStorage.getItem('uid') ? setUserLoggedIn(true) : setUserLoggedIn(false);
+  }
+  , []);
 
   useEffect(() => {
     fetch('/api/menu', {
@@ -27,6 +34,7 @@ export function Navigation() {
       .then(data => {
         setMainMenuData(data.main.tree);
         setExtraMenuData(data.extra.tree);
+        setUserMenuData(data.userMenu.tree);
       })
   }, []);
     
@@ -36,7 +44,7 @@ export function Navigation() {
 
       window.addEventListener('storage', () => {
         const cart = localStorage.getItem('shoppingCart');
-        if (window && extraNavRef.current && mainNavRef.current) {
+        if (window && extraNavRef.current && mainNavRef.current && window.innerWidth > 768) {
           extraNavRef.current.style.visibility = 'visible';
           extraNavRef.current.style.transform = 'translateY(0)';
           mainNavRef.current.style.width = '80%';
@@ -46,13 +54,13 @@ export function Navigation() {
         setCart(JSON.parse(cart));
         
         setTimeout(() => {
-          if (window && extraNavRef.current && mainNavRef.current) {
+          if (window && extraNavRef.current && mainNavRef.current && window.innerWidth > 768) {
             amountRef.current.style.transform = 'rotate(0deg)';
           }
         }, 500);
 
         setTimeout(() => {
-          if (window && extraNavRef.current && mainNavRef.current) {
+          if (window && extraNavRef.current && mainNavRef.current && window.innerWidth > 768) {
             extraNavRef.current.style.visibility = 'hidden';
             extraNavRef.current.style.transform = 'translateY(-100%)';
             mainNavRef.current.style.width = '90%';
@@ -75,7 +83,7 @@ export function Navigation() {
     }
   
     window.addEventListener('scroll', () => {
-      if (window && extraNavRef.current && mainNavRef.current) {
+      if (window && extraNavRef.current && mainNavRef.current && window.innerWidth > 768) {
         if (window.scrollY > 100) {
           extraNavRef.current.style.visibility = 'hidden';
           extraNavRef.current.style.transform = 'translateY(-100%)';
@@ -91,7 +99,7 @@ export function Navigation() {
     });
 
     mainNavRef.current.addEventListener('pointerover', () => {
-      if (window && extraNavRef.current && mainNavRef.current) {
+      if (window && extraNavRef.current && mainNavRef.current && window.innerWidth > 768) {
         extraNavRef.current.style.visibility = 'visible';
         extraNavRef.current.style.transform = 'translateY(0)';
         mainNavRef.current.style.width = '80%';
@@ -102,7 +110,7 @@ export function Navigation() {
   }, [navRef, extraNavRef, mainNavRef]);
 
 
-  if (!mainMenuData && !extraMenuData) return (
+  if (!mainMenuData && !extraMenuData && !userMenuData) return (
     <div className="nav" ref={navRef} style={{visibility: "hidden"}}>
       <div className="extranav" ref={extraNavRef}>
         <Link href="/about-us" className={
@@ -144,6 +152,8 @@ export function Navigation() {
     </div>
   );
 
+  console.log(userMenuData, 'userMenuData');
+  
   return (
     <div className="nav" ref={navRef}>
       <div className="extranav" ref={extraNavRef}>
@@ -180,6 +190,64 @@ export function Navigation() {
               </Link>
             )
           })}
+          <div className="usernav_links">
+            {userMenuData.map((item, index) => {
+              return (
+                userLoggedIn ? (
+                 item.description !== null ? (
+                  <Link href={item.url
+                  } key={index} className={
+                    path === item.url ? 'active' : ''
+                  }>
+                    {item.title}
+                  </Link>
+                 ) : (
+                  null
+                 )
+                ) : (
+                  item.description === null ? (
+                    <Link href={item.url
+                    } key={index} className={
+                      path === item.url ? 'active' : ''
+                    }>
+                      {item.title}
+                    </Link>
+                  ) : (
+                    null
+                  )
+                )
+              )
+            }
+            )}
+          </div>
+        </div>
+        <div className="hamburgerMenu">
+          <div className="hamburgerMenu__button">
+            <div className="hamburgerMenu__line"></div>
+            <div className="hamburgerMenu__line"></div>
+            <div className="hamburgerMenu__line"></div>
+          </div>
+          <div className="hamburgermenu__links">
+            {mainMenuData.map((item, index) => {
+                return (
+                  <Link href={item.url} key={index} className={
+                    path === item.url ? 'hamburgerLink active' : 'hamburgerLink'
+                  }>
+                    {item.title}
+                  </Link>
+                )
+              })}
+              {userMenuData.map((item, index) => {
+                return (
+                  <Link href={item.url} key={index} className={ 
+                    path === item.url ? 'hamburgerLink active' : 'hamburgerLink'
+                  }>
+                    {item.title}
+                  </Link>
+                )
+              }
+              )}
+          </div>
         </div>
       </div>
     </div>

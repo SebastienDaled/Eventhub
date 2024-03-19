@@ -12,6 +12,7 @@ interface IndexPageProps {
 }
 
 export default function CartPage({ nodes }: IndexPageProps) {
+  const [Message, setMessage] = useState("");
   const [cartItems, setCartItems] = useState([]);
   const [standardNodes, setStandardNodes] = useState(nodes);
 
@@ -96,11 +97,32 @@ export default function CartPage({ nodes }: IndexPageProps) {
     
   }, [nodes]);
 
-  const payCart = () => {
-    localStorage.setItem('shoppingCart', JSON.stringify([]));
-    window.dispatchEvent(new Event("storage"));
+  useEffect(() => {
+    cartItems.map((item) => {
+      if (item[0].amount > 5) {
+        deleteTickets(item[0].id);
+        setMessage("You can only buy 5 tickets per event");
+      }
+    });
+  }
+  , [cartItems]);
 
-    setCartItems([]);
+  const payCart = () => {
+    const cartItems = JSON.parse(localStorage.getItem('shoppingCart'));
+    
+    cartItems.map((item) => {
+      if (item.tickets > 5) {
+        setMessage("Cannot checkout, you can only buy 5 tickets per event");
+        return
+      } else {
+        localStorage.setItem('shoppingCart', JSON.stringify([]));
+        window.dispatchEvent(new Event("storage"));
+        setCartItems([]);
+        setMessage("Thank you for your purchase");
+      }
+    }
+    );
+    
   }
 
   const deleteTickets = (id) => {
@@ -140,7 +162,7 @@ export default function CartPage({ nodes }: IndexPageProps) {
 
 
   return (
-    <Layout >
+    <Layout>
       <Head>
         <title>Shopping Cart | EventHub</title>
         <meta
@@ -151,6 +173,7 @@ export default function CartPage({ nodes }: IndexPageProps) {
 
       <div className="corePage">
         <h1>Tickets</h1>
+          {Message && <p>{Message}</p>}
           {cartItems && cartItems.length ? (
             cartItems.map((node) => {
               return (

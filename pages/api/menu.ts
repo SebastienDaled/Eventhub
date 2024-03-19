@@ -11,10 +11,12 @@ export default async function handler(
   try {
     const menu = await drupal.getMenu("main");
     const extraMenu = await drupal.getMenu("extra-menu");
+    const userMenu = await drupal.getMenu("user");
 
     const menuData = {
       main: menu,
-      extra: extraMenu
+      extra: extraMenu,
+      userMenu: userMenu,
     }
 
     response.status(200).json(menuData);
