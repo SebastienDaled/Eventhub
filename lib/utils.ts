@@ -87,7 +87,9 @@ export const decodeToken = (token) => {
 };
 
 export const getJWT = (context) => {
+  console.log(context, 'cookies');
   const cookies = context.req.headers.cookie;
+  
   const token = cookies.split(';').filter((cookie) => cookie.includes('token'))
   const jwt = token[0].replace('token=', '');
 

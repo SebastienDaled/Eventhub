@@ -4,7 +4,7 @@ import { GetStaticPropsResult } from "next"
 import { getAllUsers } from "lib/drupal"
 
 import { Layout } from "components/layout"
-import { getUid } from "lib/utils"
+import { getJWT, getUid } from "lib/utils"
 
 interface IndexPageProps {
   user: any;
@@ -16,8 +16,11 @@ export default function AccountPage({ user }: IndexPageProps) {
 
   const logout = () => {
     localStorage.removeItem('uid');
-    // remove crsf token coockies
+    // remove crsf token coockies, token and uid
     document.cookie = "X-CSRF-Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "uid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
     window.location.assign('/auth');
   }
 
