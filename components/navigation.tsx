@@ -152,7 +152,6 @@ export function Navigation() {
     </div>
   );
 
-  console.log(userMenuData, 'userMenuData');
   
   return (
     <div className="nav" ref={navRef}>

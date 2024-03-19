@@ -47,7 +47,7 @@ export const eventTeaser = (context, limit? : Number) => drupal.getResourceColle
       "filter[status]": 1,
       "filter[field_past_date]": 0,
       'page[limit]': limit,
-      "fields[node--event]": "title,path,uid,field_hero_image_source,field_genre,field_country,field_date,field_city",
+      "fields[node--event]": "title,path,uid,field_hero_image_source,field_genre,field_country,field_date,field_city,field_favourite_users",
       include: "node_type,uid,field_genre,field_country",
       sort: "field_date",
     },

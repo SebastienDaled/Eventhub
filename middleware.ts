@@ -26,31 +26,16 @@ export async function middleware(request: NextRequest) {
     return Redirect();
   }
 
-  // if (!token) {
-  //   if (
-  //     pathname.includes("/api/admin") ||
-  //     pathname.includes("/api/student") ||
-  //     pathname.includes("/api/teacher")
-  //   ) {
-  //     return Response.json(
-  //       { success: false, message: "authentication failed" },
-  //       { status: 401 }
-  //     );
-  //   }
-  // } else {
-  //   if (
-  //     (pathname.startsWith("/api/admin") && user.account_type !== "Admin") ||
-  //     (pathname.startsWith("/api/teacher") &&
-  //       user.account_type !== "Teacher") ||
-  //     (pathname.startsWith("/api/student") && user.account_type !== "Student")
-  //   ) {
-  //     console.log(pathname, user.account_type);
-  //     return Response.json(
-  //       { success: false, message: "authentication failed" },
-  //       { status: 401 }
-  //     );
-  //   }
-  // }
+  if (!token) {
+    if (
+      pathname.includes("/api/favourite")
+    ) {
+      return Response.json(
+        { success: false, message: "authentication failed" },
+        { status: 401 }
+      );
+    }
+  }
 }
 
 export const config = {
@@ -58,5 +43,6 @@ export const config = {
     "/auth",
     "/favourites",
     "/account",
+    "/api/favourite",
   ],
 };

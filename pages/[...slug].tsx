@@ -11,6 +11,8 @@ import { NodeEvent } from "components/node--event"
 import { Webform } from "components/webform"
 
 import Yaml from 'js-yaml';
+import { get } from "http"
+import { getUid } from "lib/utils"
 
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
@@ -32,7 +34,7 @@ export default function NodePage({ resource, related, webform, comments }: NodeP
       </Head>
       {resource.type === "node--page" && <NodeBasicPage node={resource} />}
       {resource.type === "node--article" && <NodeArticle node={resource} other={related} comments={comments}/>}
-      {resource.type === "node--event" && <NodeEvent node={resource} related={related} />} 
+      {resource.type === "node--event" && <NodeEvent node={resource} related={related}/>} 
      
         {resource.type === "webform--webform" &&  <div className="corePage"><Webform element={webform} id={resource.title} /></div>}
       
@@ -108,8 +110,8 @@ export async function getStaticProps(
     other.params = {
       "filter[status]": 1,
       "filter[field_past_date]": 0,
-      "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country",
-      include: "node_type,uid,field_genre,field_country",
+      "fields[node--event]": "title,path,field_image,uid,created,field_hero_image_source,body,field_city,field_date,field_genre,field_country,field_favourite_users",
+      include: "node_type,uid,field_genre,field_country,field_favourite_users",
       sort: "-field_date",
     }
   } else if (resource.type === "node--article") {
@@ -136,8 +138,7 @@ export async function getStaticProps(
   console.log(resource.id);
   
   const comments = await getComments(context, resource.id);
-  
-  
+
   return {
     props: {
       resource,
