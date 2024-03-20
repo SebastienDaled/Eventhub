@@ -4,6 +4,7 @@ import { DrupalNode } from "next-drupal"
 import { absoluteUrl, formatDate, timeAgo } from "lib/utils"
 import { NodeArticleTeaser } from "./node--article--teaser"
 import { CommentForm } from "./commentform"
+import { Breadcrumb } from "./breadcrumb"
 
 interface NodeArticleProps {
   node: DrupalNode
@@ -41,6 +42,7 @@ export function NodeArticle({ node, other, comments, ...props }: NodeArticleProp
           </div>
       </div>
       <div className="core">
+        <Breadcrumb />
         <article {...props}>
         <div className="content__small">
           {node.field_article_content && (

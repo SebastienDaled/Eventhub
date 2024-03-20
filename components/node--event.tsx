@@ -8,6 +8,7 @@ import { add, set } from "date-fns"
 import next from "next"
 import { NextRequest } from "next/server"
 import { use, useEffect, useState } from "react"
+import { Breadcrumb } from "./breadcrumb"
 
 interface NodeArticleProps {
   node: DrupalNode
@@ -55,7 +56,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
       }
     }
   }
-  , [uid]);
+  , [uid, node.field_favourite_users]);
   
   return (
 
@@ -96,6 +97,8 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
       </div>
       <div className="core">
         <article {...props}>
+          <Breadcrumb />
+
           <h2 className="subtitle">Info</h2>
 
           <div className="eventPage__main">
