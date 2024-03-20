@@ -1,3 +1,4 @@
+import { decodeToken } from "lib/utils";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -8,6 +9,7 @@ export async function middleware(request: NextRequest) {
   // get the token fom cookies
   const cookies = request.headers.get("cookie");
   const token = cookies.split(";").filter((cookie) => cookie.includes("token"))[0]?.replace("token=", "");
+  
 
   const Redirect = () => {
     if (token) {

@@ -11,8 +11,6 @@ import { NodeEvent } from "components/node--event"
 import { Webform } from "components/webform"
 
 import Yaml from 'js-yaml';
-import { get } from "http"
-import { getUid } from "lib/utils"
 
 const RESOURCE_TYPES = ["node--page", "node--article"]
 
@@ -25,7 +23,8 @@ interface NodePageProps {
 
 export default function NodePage({ resource, related, webform, comments }: NodePageProps) {
   if (!resource) return null
-
+  console.log(resource);
+  
   return (
     <Layout>
       <Head>

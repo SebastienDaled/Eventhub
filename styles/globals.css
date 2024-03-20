@@ -264,9 +264,9 @@ footer li + li {
 .coreAbout h1{
   font-size: 1.8rem;
   font-weight: 700;
-  margin-bottom: 3rem;
-  width: calc(80% - 4rem);
+  width: calc(80% - 4.7rem);
   margin: 0 auto;
+  margin-bottom: 1.5rem;
 }
 .corePage h1 {
   font-size: 1.8rem;

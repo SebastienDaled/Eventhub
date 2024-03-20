@@ -9,6 +9,7 @@ import { Layout } from "components/layout"
 import { NodeEventTeaser } from "components/node--event--teaser"
 import { NodeArticleTeaser } from "components/node--article--teaser"
 import { DrupalJsonApiParams } from "drupal-jsonapi-params"
+import { Breadcrumb } from "components/breadcrumb"
 
 interface IndexPageProps {
   nodes: DrupalNode[];

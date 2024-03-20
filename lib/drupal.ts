@@ -4,21 +4,14 @@ export const drupal = new DrupalClient(
   process.env.NEXT_PUBLIC_DRUPAL_BASE_URL,
   {
     previewSecret: "jQ7pR9oZ2L5nWc4K8uE3z",
-    // auth: {
-    //   clientId: process.env.DRUPAL_CLIENT_ID,
-    //   clientSecret: process.env.DRUPAL_CLIENT_SECRET,
-    //   // username: process.env.DRUPAL_USERNAME,
-    //   // password: process.env.DRUPAL_PASSWORD,
-    // },
+    // jwt token as auth, get it from cookie
+    // auth: "Bearer " + "eyJpYXQiOjE3MTA5MzA1NTAsImV4cCI6MTcxMDkzMDg1MCwiZHJ1cGFsIjp7InVpZCI6IjEifX0"
+    
     auth: () => 
     "Basic " +
     Buffer.from(
       `${process.env.BASIC_AUTH_USERNAME}:${process.env.BASIC_AUTH_PASSWORD}`
     ).toString("base64"),
-    // auth: {
-    //   clientId: process.env.DRUPAL_CLIENT_ID,
-    //   clientSecret: process.env.DRUPAL_CLIENT_SECRET,
-    // },
   }
 )
 
@@ -151,6 +144,7 @@ export const getAllUsers = (user?) => drupal.getResourceCollection(
       include: "roles",
       sort: "name",
     },
+    withAuth: true,
   }
 );
 
