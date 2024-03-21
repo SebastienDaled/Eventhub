@@ -17,7 +17,7 @@ export default function CalenderPage({ dates }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Articles | EventHub</title>
+        <title>Calendar | EventHub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."

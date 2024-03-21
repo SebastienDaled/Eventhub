@@ -54,7 +54,7 @@ export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Next.js for Drupal</title>
+        <title>Home | Eventhub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."

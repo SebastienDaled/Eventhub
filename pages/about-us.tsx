@@ -16,7 +16,7 @@ export default function AboutUsPage({ nodes, allImages }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Events | EventHub</title>
+        <title>About us | EventHub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."

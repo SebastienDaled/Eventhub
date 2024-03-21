@@ -16,7 +16,7 @@ export default function ContactPage({ webform, resource }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Events | EventHub</title>
+        <title>Contact | EventHub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."

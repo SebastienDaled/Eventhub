@@ -29,7 +29,7 @@ export default function AccountPage({ user }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Shopping Cart | EventHub</title>
+        <title>Account | EventHub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."

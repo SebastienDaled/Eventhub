@@ -38,7 +38,7 @@ export default function FavouritesPage({ nodes }: IndexPageProps) {
   return (
     <Layout>
       <Head>
-        <title>Shopping Cart | EventHub</title>
+        <title>Favourites | EventHub</title>
         <meta
           name="description"
           content="A Next.js site powered by a Drupal backend."
