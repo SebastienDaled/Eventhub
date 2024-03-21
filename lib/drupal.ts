@@ -51,7 +51,7 @@ export const eventTeaser = (context, limit? : Number) => drupal.getResourceColle
 // this returns the header content for the home page
 export const headerIndex = () => drupal.getResource(
   "node--page",
-  "602b4cc5-6b79-4bd7-9054-d24ac27c2142",
+  "c421159a-30f5-4fd7-bdc1-fa769473c570",
   {
     params: {
       "fields[node--page]": "title,body",

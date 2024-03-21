@@ -109,7 +109,7 @@ export default function IndexPage({ nodes, header, articles }: IndexPageProps) {
               </div>
             ))
           ) : (
-            <p className="py-4">No nodes found</p>
+            <p className="py-4">No Articles found</p>
           )}
         </div>
 
@@ -126,11 +126,6 @@ export async function getStaticProps(
   const articles = await articleTeaser(context, 6);
 
   const header = await headerIndex();
-
-  // const userToken = await drupal.getAccessToken({
-  //   clientId: "c612d27e-9599-46c3-a006-331b6162552d",
-  //   clientSecret: "admin",
-  // })
   
   return {
     props: {

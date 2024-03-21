@@ -21,8 +21,7 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
 
   let relatedNodes = related.filter((relatedNode) => {
     return relatedNode.field_genre.name === node.field_genre.name && relatedNode.id !== node.id;
-  }
-  )
+  })
   relatedNodes = relatedNodes.slice(0, 3);
 
   useEffect(() => {
@@ -44,8 +43,6 @@ export function NodeEvent({ node, related, ...props }: NodeArticleProps) {
         newUserUid: uidparam,
       }),
     });
-
-    console.log(response, 'response');
   }
 
   useEffect(() => {

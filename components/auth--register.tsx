@@ -3,11 +3,12 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 
-export function LoginForm () {
+export function RegisterForm () {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('success');
   
   const [formState, setFormState] = useState({
+    email: '',
     username: '',
     password: '',
   });  
@@ -15,7 +16,7 @@ export function LoginForm () {
   async function handleSubmit(event) {
     event.preventDefault()
     
-    const response = await fetch(`/api/auth/auth`, {
+    const response = await fetch(`/api/auth/auth-register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,6 +50,10 @@ export function LoginForm () {
     {message && <div className={`message message--${messageType}`}>{message}</div>}
     <form>
       <div className='form__field'>
+        <label htmlFor="email" className='form__label'>Email</label>
+        <input type="email" id="email" name="email" onChange={(e) => setFormState({ ...formState, email: e.target.value })} className='form__input'/>
+      </div>
+      <div className='form__field'>
         <label htmlFor="username" className='form__label'>Username</label>
         <input type="text" id="username" name="username" onChange={(e) => setFormState({ ...formState, username: e.target.value })} className='form__input'/>
       </div>
@@ -58,7 +63,7 @@ export function LoginForm () {
         <input id="password" type='password' name="password" onChange={(e) => setFormState({ ...formState, password: e.target.value })} className='form__input'/>
       </div>
       
-      <button type="submit" className='btn__submit' onClick={handleSubmit}>Login</button>
+      <button type="submit" className='btn__submit' onClick={handleSubmit}>Register</button>
     </form>
    </>
   );

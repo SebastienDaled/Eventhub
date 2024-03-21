@@ -28,7 +28,7 @@ export default function CalenderPage({ dates }: IndexPageProps) {
         <h1>Calender</h1>
 
         
-        <Calender dates={dataDates} />
+        <Calender dates={dataDates} key={"calendar"}/>
       </div>
     </Layout>
   );

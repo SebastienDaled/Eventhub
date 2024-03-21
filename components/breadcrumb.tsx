@@ -12,8 +12,6 @@ export function Breadcrumb() {
     <div style={{color: "white"}} className="mb-6">
       {breadcrumbArray.map((crumb, index) => {
         const url = breadcrumbArray.slice(0, index + 1).join('/');
-        console.log(index, breadcrumbArray.length, url);
-        
         return (
           <span key={index}>
             <Link href={`/${url.replace(/\s/g, "-")}`} className={index + 1 !== breadcrumbArray.length ? "underline" : null}>

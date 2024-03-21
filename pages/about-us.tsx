@@ -53,7 +53,7 @@ export async function getStaticProps(
   // node--event
   const nodes = await drupal.getResource(
     "node--page",
-    "609f5d4e-4e18-4cda-a252-f227c990d564",
+    "ebc552e3-985c-41f0-897f-0d4595816ef4",
     { 
       params: {
         "filter[status]": 1,
